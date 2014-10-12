@@ -18,6 +18,8 @@ import javax.swing.JScrollPane;
 
 public class MainFrame extends JFrame{
 
+	private static final int N = 8000;
+	
 	private GridLayout layout;
 	
 	private WaveformPanel waveform;

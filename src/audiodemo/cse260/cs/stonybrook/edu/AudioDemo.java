@@ -28,15 +28,22 @@ import javax.swing.SwingWorker;
  */
 public class AudioDemo extends JFrame {
 
+	/** Samples per spectra */ 
+	public static int N = 8000;
+	
 	/** The currently displayed AudioClip, if any, otherwise null. */
 	private AudioClip currentClip;
 
 	/** WaveformPanel displaying the current clip, if any, otherwise null. */
 	private WaveformPanel clipPanel;
+	
+	/** Spectrogram displaying the current Spectrogram */
+	private Spectrogram spectrogram;
 
 	public AudioDemo() {
 		super("Audio Demo");
-		setSize(800,300);
+		//setSize(800,300);
+		setSize(800, N);
 		getContentPane().setLayout(new BorderLayout());
 		JMenuBar mb = new JMenuBar();
 		setJMenuBar(mb);
@@ -67,8 +74,8 @@ public class AudioDemo extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				loadClip(AudioClip.testClip());
 				
-				int N = 8000;
-				double[] DFT = Calculations.getDFT(currentClip, 0);
+				//int N = 8000;
+				double[] DFT = Calculations.getDFT(currentClip);
 				Calculations.testPrintArray(DFT);
 			}
 		});
@@ -170,9 +177,11 @@ public class AudioDemo extends JFrame {
 				AudioInputStream ain = AudioSystem.getAudioInputStream(f);
 				currentClip = AudioClip.fromStream(ain, f.getName());
 				clipPanel = new WaveformPanel(currentClip);
+				spectrogram = new Spectrogram(currentClip);
 				ain.close();
 				getContentPane().removeAll();
-				getContentPane().add(new JScrollPane(clipPanel));
+				//getContentPane().add(new JScrollPane(clipPanel));
+				getContentPane().add(new JScrollPane(spectrogram));
 				invalidate();
 				validate();
 				//revalidate();
@@ -194,12 +203,16 @@ public class AudioDemo extends JFrame {
 	private void loadClip(AudioClip clip) {
 		currentClip = clip;
 		clipPanel = new WaveformPanel(currentClip);
+		spectrogram = new Spectrogram (currentClip);
 		getContentPane().removeAll();
-		getContentPane().add(new JScrollPane(clipPanel));
+		//getContentPane().add(new JScrollPane(clipPanel));
+		getContentPane().add(new JScrollPane(spectrogram));
 		invalidate();
 		validate();
 		//revalidate();
 		repaint();
+		
+		
 	}
 
 	public static void main(String[] args) {

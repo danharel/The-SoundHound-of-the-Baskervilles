@@ -44,11 +44,12 @@ public class AudioClip {
 	}
 	
 	public static AudioClip testClip() {
-		int sampleRate = 8000;
+		final int sampleRate = AudioDemo.N;
 		int frequency = 1;
+		final int seconds = 1;
 		AudioFormat format = new AudioFormat(sampleRate, 16, 1, true, true);
-		double[] testSamples = new double[sampleRate];
-		for (int i = 0; i < sampleRate; i++) {
+		double[] testSamples = new double[sampleRate*seconds];
+		for (int i = 0; i < testSamples.length; i++) {
 			testSamples[i] = Math.sin(2*Math.PI*i*frequency/sampleRate);
 		}
 		

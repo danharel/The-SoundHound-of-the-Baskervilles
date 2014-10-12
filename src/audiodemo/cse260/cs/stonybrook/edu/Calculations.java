@@ -1,10 +1,16 @@
 package audiodemo.cse260.cs.stonybrook.edu;
 
+import java.util.ArrayList;
+
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
 
 public class Calculations {
 
-	public static final int N = 8000;
+	/** Number of samples per spectra */
+	private static int N;
+	
+	/** Difference required for a sample to be considered a "peak" */
+	private static final double peakDifference = 10000.0;
 	
 	public Calculations() {
 		
@@ -18,10 +24,16 @@ public class Calculations {
 	 * 				double[] representing the DFT of the AudioClip for
 	 * 				a set of N samples
 	 */
-	public static double[] getDFT(AudioClip clip, int segment) {
+	public static double[] getDFT(AudioClip clip) {
+		return getDFT(clip, 0);
+	}
+	
+	public static double[] getDFT(AudioClip clip, int startSample) {
+		N = AudioDemo.N;
+		
 		double[] samples = new double[N*2];
 		for (int i = 0; i < N; i++) {
-			samples[i*2] = clip.getSample(i);
+			samples[i*2] = clip.getSample(i+startSample);
 			//System.out.println(clip.getSample(i));
 		}
 		
@@ -72,6 +84,24 @@ public class Calculations {
 	
 	public static int getN() {
 		return N;
+	}
+	
+	public static double getMax(double[] arr) {
+		double max = Double.MIN_VALUE;
+		for (double d: arr)
+			if (d > max)
+				max = d;
+		return max;
+	}
+	
+	public static ArrayList<Integer> getPeakIndexes(double[] powerArray) {
+			ArrayList<Integer> peaks = new ArrayList<Integer>();
+			for (int i = 1; i < powerArray.length - 1; i++) {
+				if (powerArray[i] - powerArray[i-1] > peakDifference &&
+					powerArray[i] - powerArray[i+1] > peakDifference)
+					peaks.add(i);
+			}
+			return peaks;
 	}
 
 }
