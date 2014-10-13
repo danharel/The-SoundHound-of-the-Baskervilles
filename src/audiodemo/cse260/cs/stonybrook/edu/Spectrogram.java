@@ -17,6 +17,9 @@ public class Spectrogram extends JPanel {
 	
 	/** Number of samples per spectra */
 	private final int N = AudioDemo.N;
+	
+	/** The horizontal zoom factor. */
+	private double hzoom;
 
 	public Spectrogram(AudioClip clip) {
 		super();
@@ -34,12 +37,10 @@ public class Spectrogram extends JPanel {
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		//System.out.println(clip.length());
 		//ith segment of length N in the song.
 		for (int i = 0; i < clip.length()/N; i++) {
 			// By making an array of all powerArrays, lots of space is taken up, but it doesn't need to recalculate the values every time the image is shifted
 			if (powerArrays[i] == null) {
-				System.out.println("Calculating...");
 				//Get the DFT array of the song, starting from a specific sample.
 				double[] dft = Calculations.getDFT(clip,(i)*N);
 				//Get the power array of the song using the DFT array.
@@ -65,14 +66,6 @@ public class Spectrogram extends JPanel {
 				//Calculate the grey-scale value of the color to draw
 				float colorVal = (float)(powerArray[j]/max);
 				Color color = new Color(1-colorVal, 1-colorVal, 1-colorVal, 1 );
-				/*try {
-					if (powerArray[j] > powerArray[j-1] && powerArray[j] > powerArray[j-2]
-							&& powerArray[j] > powerArray[j+1] && powerArray[j] > powerArray[j+2])
-						color = Color.YELLOW;
-						
-				}
-				catch (ArrayIndexOutOfBoundsException e) {
-				}*/
 				//Set the color
 				g.setColor(color);
 				//Draw the color
@@ -95,8 +88,29 @@ public class Spectrogram extends JPanel {
 			
 		}
 		
-		
-		
+	}
+	
+	/**
+	 * Set the horizontal zoom factor.
+	 * This causes the size of the panel to change.
+	 *
+	 * @param horiz  The horizontal zoom factor, in samples per pixel.
+	 */
+	public void setZoom(double horiz) {
+		hzoom = horiz;
+		int width = (int)(clip.length() / hzoom);
+		int height = 100;
+		setPreferredSize(new Dimension(width, height));
+		revalidate();
+	}
+
+	/**
+	 * Get the horizontal zoom factor.
+	 * 
+	 * @return  the horizontal zoom factor, in samples per pixel.
+	 */
+	public double getZoom() {
+		return hzoom;
 	}
 
 }

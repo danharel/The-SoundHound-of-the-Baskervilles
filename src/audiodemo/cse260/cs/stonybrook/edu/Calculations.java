@@ -10,7 +10,7 @@ public class Calculations {
 	private static int N;
 	
 	/** Difference required for a sample to be considered a "peak" */
-	private static final double peakDifference = 10000.0;
+	private static final double peakDifference = 5000.0;
 	
 	public Calculations() {
 		

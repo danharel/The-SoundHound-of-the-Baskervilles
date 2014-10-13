@@ -1,6 +1,7 @@
 package audiodemo.cse260.cs.stonybrook.edu;
 
 import java.awt.BorderLayout;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -16,6 +17,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingWorker;
 
@@ -42,8 +44,8 @@ public class AudioDemo extends JFrame {
 
 	public AudioDemo() {
 		super("Audio Demo");
-		//setSize(800,300);
-		setSize(800, N);
+		setSize(800,600);
+		//setSize(800, N);
 		getContentPane().setLayout(new BorderLayout());
 		JMenuBar mb = new JMenuBar();
 		setJMenuBar(mb);
@@ -87,8 +89,10 @@ public class AudioDemo extends JFrame {
 		(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(clipPanel != null)
+				if(clipPanel != null) {
 					clipPanel.setZoom(clipPanel.getZoom() / 2.0);
+					spectrogram.setZoom(clipPanel.getZoom() / 2.0);
+				}
 			}
 		});
 		JMenuItem zoomOutItem = new JMenuItem("Zoom out");
@@ -99,6 +103,7 @@ public class AudioDemo extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if(clipPanel != null)
 					clipPanel.setZoom(clipPanel.getZoom() * 2.0);
+					spectrogram.setZoom(clipPanel.getZoom() * 2.0);
 			}
 		});
 		JMenuItem playItem = new JMenuItem("Play");
@@ -180,8 +185,12 @@ public class AudioDemo extends JFrame {
 				spectrogram = new Spectrogram(currentClip);
 				ain.close();
 				getContentPane().removeAll();
+				JPanel panel = new JPanel(new GridLayout(2,1));
+				panel.add(new JScrollPane(clipPanel));
+				panel.add(new JScrollPane(spectrogram));
 				//getContentPane().add(new JScrollPane(clipPanel));
-				getContentPane().add(new JScrollPane(spectrogram));
+				//getContentPane().add(new JScrollPane(spectrogram));
+				getContentPane().add(panel);
 				invalidate();
 				validate();
 				//revalidate();
