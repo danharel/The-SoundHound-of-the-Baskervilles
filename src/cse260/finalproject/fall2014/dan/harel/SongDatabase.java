@@ -1,13 +1,14 @@
 package cse260.finalproject.fall2014.dan.harel;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
 /**
- * Database of songs.
+ * Database of songs and probes.
  * @author danharel
  *
  */
@@ -21,6 +22,8 @@ public class SongDatabase implements Serializable {
 	
 	/** Songs that have been indexed */
 	HashSet<AudioClip> songs;
+	
+	
 	
 	/** File name in which the databases will be saved to and loaded from */
 	private final String FILE_NAME = "database.dat";

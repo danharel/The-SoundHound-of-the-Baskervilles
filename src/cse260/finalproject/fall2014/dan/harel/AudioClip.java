@@ -3,6 +3,7 @@ package cse260.finalproject.fall2014.dan.harel;
 import java.io.File;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.Clip;
 
 /**
  * Object representation of an audio file of arbitrary length.
@@ -11,11 +12,14 @@ import javax.sound.sampled.AudioFormat;
  */
 public class AudioClip {
 
-	/** File representing the audio clip */
-	File audioFile;
+	/** Name of the clip */
+	private String name;
+	
+	/** Clip representing the audio clip */
+	private Clip audio;
 	
 	/** Array of bytes read in */
-	byte[] bytes;
+	private byte[] bytes;
 	
 	/**
 	 * Creates a new AudioClip using the given file path
@@ -40,5 +44,16 @@ public class AudioClip {
 	 */
 	private AudioFormat getAudioFormat(File file) {
 		return null;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * 		ID number for the track.
+	 */
+	public int getTrackId() {
+		/*Will most likely just return the hash code. May be subject to change.
+		Depends on how well that works.*/
+		return 0;
 	}
 }
