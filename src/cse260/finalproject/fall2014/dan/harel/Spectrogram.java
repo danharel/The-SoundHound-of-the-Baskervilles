@@ -3,7 +3,7 @@ package cse260.finalproject.fall2014.dan.harel;
 import java.util.ArrayList;
 
 /**
- * Model class for the Spectragram of an AudioClip
+ * Model class for the Spectragram of an AudioClip.
  * @author danharel
  * @deprecated
  * 		User Spectra to represent an individual piece of a song rather than an

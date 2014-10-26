@@ -3,7 +3,7 @@ package cse260.finalproject.fall2014.dan.harel;
 import java.util.ArrayList;
 
 /**
- * Model for an individual Spectra
+ * Model for an individual Spectra.
  * @author danharel
  *
  */

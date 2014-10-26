@@ -4,6 +4,11 @@ import java.io.File;
 
 import javax.sound.sampled.AudioFormat;
 
+/**
+ * Object representation of an audio file of arbitrary length.
+ * @author danharel
+ *
+ */
 public class AudioClip {
 
 	/** File representing the audio clip */

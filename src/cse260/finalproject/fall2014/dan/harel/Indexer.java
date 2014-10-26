@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+/**
+ * Application for indexing songs.
+ * @author danharel
+ *
+ */
 public class Indexer extends JFrame {
 
 	/** Database that stores songs */
 	private final SongDatabase database;
 	
 	/**
-	 * Creates a new JFrame
+	 * Creates a new JFrame for the Indexer application
 	 */
 	public Indexer() {
 		database = null;

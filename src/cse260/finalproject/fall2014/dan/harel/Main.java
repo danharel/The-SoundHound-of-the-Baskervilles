@@ -1,5 +1,10 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+/**
+ * Main class to be run.
+ * @author danharel
+ *
+ */
 public class Main {
 
 	/** Application that identifies a clip */

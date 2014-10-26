@@ -6,6 +6,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+/**
+ * Database of songs.
+ * @author danharel
+ *
+ */
 public class SongDatabase implements Serializable {
 
 	/** Singleton database */

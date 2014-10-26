@@ -4,6 +4,12 @@ import java.awt.Graphics;
 
 import javax.swing.JPanel;
 
+/**
+ * Abtract implementation of functionality for a JPanel to display information.
+ * Extended by WaveformPanel and SpectrogramPanel
+ * @author danharel
+ *
+ */
 public abstract class DisplayPanel extends JPanel {
 	
 	/** AudioClip that this DisplayPanel represents */
@@ -41,10 +47,18 @@ public abstract class DisplayPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * 
+	 * @return
+	 * 		Number of samples that have to fit within a single pixel
+	 */
 	public int getSamplesPerPixel() {
 		return -1;
 	}
 	
+	/**
+	 * Redraws the JPanel.
+	 */
 	@Override
 	public abstract void paintComponent(Graphics g);
 	
