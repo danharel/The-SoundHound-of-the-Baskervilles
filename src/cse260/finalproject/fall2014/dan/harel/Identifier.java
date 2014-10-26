@@ -14,7 +14,7 @@ public class Identifier extends JFrame {
 	private SpectrogramPanel spectrogram;
 
 	public Identifier() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	private void loadSong() {

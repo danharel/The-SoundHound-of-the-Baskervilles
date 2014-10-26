@@ -2,25 +2,57 @@ package cse260.finalproject.fall2014.dan.harel;
 
 import java.util.ArrayList;
 
-public class Indexer {
+import javax.swing.JFrame;
 
-	SongDatabase database;
+public class Indexer extends JFrame {
+
+	/** Database that stores songs */
+	private final SongDatabase database;
 	
-	
+	/**
+	 * Creates a new JFrame
+	 */
 	public Indexer() {
+		database = null;
+	}
+	
+	/**
+	 * Creates a file chooser for the user to add a song.
+	 */
+	public void addSongFromFileSystem() {
 		
 	}
 	
+	/**
+	 * Creates a file chooser for the user to select a folder to add all songs 
+	 * in the folder
+	 */
+	public void addSongFromFolder() {
+		
+	}
+	
+	/**
+	 * Creates a file chooser for the user to select a folder to add all songs
+	 * in the folder, and all subfolders.
+	 */
+	public void addFolderFromFolderRecursively() {
+		
+	}
+	
+	/**
+	 * Adds an AudioClip to the index
+	 * @param clip
+	 */
 	public void addSong(AudioClip clip) {
 		
 	}
 	
-	public boolean songExists(AudioClip clip) {
-		return false;
-	}
-	
-	public ArrayList<Probe> getProbes(AudioClip clip) {
-		return null;
+	/**
+	 * Deletes an AudioClip from the index
+	 * @param clip
+	 */
+	public void deleteSong(AudioClip clip) {
+		
 	}
 	
 }
