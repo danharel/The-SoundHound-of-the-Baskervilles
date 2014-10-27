@@ -52,6 +52,16 @@ public class SongDatabase implements Serializable {
 	
 	/**
 	 * 
+	 * @param clip
+	 * @return
+	 * 		The number of probes associated with the given AudioClip
+	 */
+	public int getNumProbesIndexed(AudioClip clip) {
+		return -1;
+	}
+	
+	/**
+	 * 
 	 * @param probe
 	 * 		Probe that can be matched to a song.
 	 * @return
@@ -85,6 +95,22 @@ public class SongDatabase implements Serializable {
 	}
 	
 	/**
+	 * Remove all Probes from the database that have a ProbeLocation that 
+	 * matches the AudioClip's id
+	 * id
+	 * @param probe
+	 * 		Probe to remove
+	 * @param clip
+	 * 		AudioClip which the Probe originates from
+	 */
+	public void removeProbeFromClip(Probe probe, AudioClip clip) {
+		//Implemented because I know I'll forget how to do it later.
+		for (ProbeLocation loc : probeLocations.get(probe))
+			if (loc.getId() == clip.getTrackId())
+				probeLocations.remove(loc);
+	}
+	
+	/**
 	 * Adds a probe to the database
 	 * @param probe
 	 */
@@ -105,6 +131,5 @@ public class SongDatabase implements Serializable {
 	private static void loadDatabase() {
 		
 	}
-	
 	
 }

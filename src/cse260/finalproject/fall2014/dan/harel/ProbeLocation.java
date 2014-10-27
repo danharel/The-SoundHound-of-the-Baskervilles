@@ -39,6 +39,15 @@ public class ProbeLocation {
 	/**
 	 * 
 	 * @return
+	 * 		Song ID associated with this ProbeLocation
+	 */
+	public int getId() {
+		return -1;
+	}
+	
+	/**
+	 * 
+	 * @return
 	 * 		Time at which the probe appears
 	 */
 	public int getTime() {
