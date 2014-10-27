@@ -1,0 +1,28 @@
+Loading the program:
+	The indexer searches for a data file.
+	If the file exists, it's loaded.
+	If it's not found, it is created.
+
+Loading a song:
+	User selects a song from a list.
+	Song is loaded into the system.
+
+	Extension: Identifying a song:
+		Probes are extracted from the song.	
+		Identical probes are pulled from the database.
+		Delta values are determined for probes from the same song.
+		Delta values from indexed songs are compared to corresponding delta values from the input clip.
+
+	Extension: Playing a song:
+		New thread is created.
+		Thread plays the song in the background.
+
+Adding a song:
+	Probes are extracted from a song.
+	The song is mapped to a list of all of its Probes.
+	The Probes are mapped to a ProbeLocation.
+
+Deleting a song:
+	The list of all probes for that song are pulled up.
+	All of the ProbeLocations associated with this Probe are removed.
+	The song is removed from the list of songs.
