@@ -1,6 +1,6 @@
 package cse260.finalproject.fall2014.dan.harel;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Model for an individual Spectra.
@@ -35,7 +35,7 @@ public class Spectra {
 	 * @return
 	 * 		List of Peaks of the Spectra
 	 */
-	public ArrayList<Peak> getPeaks() {
+	public List<Peak> getPeaks() {
 		return null;
 	}
 	

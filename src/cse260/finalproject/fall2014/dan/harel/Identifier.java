@@ -17,6 +17,9 @@ public class Identifier extends JFrame {
 	
 	/** JPanel representing the Spectrogram */
 	private SpectrogramPanel spectrogram;
+	
+	/** Database of songs and probes for comparisons */
+	private SongDatabase database;
 
 	/**
 	 * Creates new Identifier object
@@ -45,6 +48,24 @@ public class Identifier extends JFrame {
 	 * application.
 	 */
 	private void playSongInBackground() {
+		
+	}
+	
+	/**
+	 * Finds the closest match of an AudioClip to another AudioClip in the
+	 * database.
+	 * @param clip
+	 * 		Clip to match.
+	 */
+	private void findMatch(AudioClip clip) {
+		
+	}
+	
+	private void quit() {
+		
+	}
+	
+	private void save() {
 		
 	}
 

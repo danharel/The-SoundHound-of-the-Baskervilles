@@ -28,4 +28,9 @@ public class Probe {
 	public Probe(double f1, double f2, int time) {
 		
 	}
+	
+	@Override
+	public boolean equals(Object o) {
+		return false;
+	}
 }

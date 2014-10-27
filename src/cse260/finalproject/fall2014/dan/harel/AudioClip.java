@@ -1,6 +1,8 @@
 package cse260.finalproject.fall2014.dan.harel;
 
 import java.io.File;
+import java.util.List;
+import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.Clip;
@@ -20,6 +22,9 @@ public class AudioClip {
 	
 	/** Array of bytes read in */
 	private byte[] bytes;
+	
+	/** List of Peaks that appear in the song. */
+	private List<Peak> peaks;
 	
 	/**
 	 * Creates a new AudioClip using the given file path
@@ -54,6 +59,15 @@ public class AudioClip {
 	public int getTrackId() {
 		/*Will most likely just return the hash code. May be subject to change.
 		Depends on how well that works.*/
-		return 0;
+		return -1;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * 		A list of peaks in the clip
+	 */
+	public List<Peak> getPeaks() {
+		return null;
 	}
 }

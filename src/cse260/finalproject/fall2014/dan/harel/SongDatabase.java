@@ -6,6 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Database of songs and probes.
@@ -18,12 +20,10 @@ public class SongDatabase implements Serializable {
 	public static SongDatabase database = null;
 	
 	/** Map of a Probe to its locations */
-	HashMap<Probe, ArrayList<ProbeLocation>> probeLocations;
+	HashMap<Probe, Set<ProbeLocation>> probeLocations;
 	
-	/** Songs that have been indexed */
-	HashSet<AudioClip> songs;
-	
-	
+	/** Map of an AudioClip to the Probes extracted */ 
+	HashMap<AudioClip, List<Probe>> clipIndexes;
 	
 	/** File name in which the databases will be saved to and loaded from */
 	private final String FILE_NAME = "database.dat";
@@ -43,12 +43,45 @@ public class SongDatabase implements Serializable {
 	
 	/**
 	 * 
-	 * @param probe
 	 * @return
-	 * 		List of possible locations of a given Probe
+	 * 		Set of all songs that have been indexed.
 	 */
-	public ArrayList<ProbeLocation> getProbeLocations(Probe probe) {
+	public Set<AudioClip> getSongsIndexed() {
 		return null;
+	}
+	
+	/**
+	 * 
+	 * @param probe
+	 * 		Probe that can be matched to a song.
+	 * @return
+	 * 		List of locations of Probes that match the given Probe
+	 */
+	public Set<ProbeLocation> getMatches(Probe probe) {
+		return null;
+	}
+	
+	/**
+	 * Adds an AudioClip to the map of AudioClips to its Probes, and adds those
+	 * Probes to the map of Probes to their ProbeLocation
+	 * @param clip
+	 * 		Clip to add
+	 */
+	public void addAudioClip(AudioClip clip) {
+		
+	}
+	
+	/**
+	 * 
+	 * @param clip
+	 * 		Clip to remove from the index
+	 */
+	public void removeAudioClip(AudioClip clip) {
+		/* Don't forget to remove the corresponding probe locations from
+		 * probeLocations. That is, go trough the list of Probes for that
+		 * AudioClip, then remove all ProbeLocations with a songID that matches
+		 * the AudioClip being removed
+		 */
 	}
 	
 	/**
@@ -72,4 +105,6 @@ public class SongDatabase implements Serializable {
 	private static void loadDatabase() {
 		
 	}
+	
+	
 }

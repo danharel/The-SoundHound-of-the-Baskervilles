@@ -6,7 +6,7 @@ package cse260.finalproject.fall2014.dan.harel;
  * @author danharel
  *
  */
-public class ProbeLocation implements Comparable {
+public class ProbeLocation {
 
 	/** ID number of the song that a particular probe appears in */
 	private int songId;
@@ -44,9 +44,15 @@ public class ProbeLocation implements Comparable {
 	public int getTime() {
 		return -1;
 	}
-
-	@Override
-	public int compareTo(Object o) {
-		return 0;
+	
+	/**
+	 * 
+	 * @param p1
+	 * @param p2
+	 * @return
+	 * 		The difference in time between the two Probes.
+	 */
+	public static int getDelta(Probe p1, Probe p2) {
+		return -1;
 	}
  }

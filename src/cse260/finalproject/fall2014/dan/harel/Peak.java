@@ -11,17 +11,17 @@ public class Peak {
 	/** Time at which a peak appears */
 	private int time;
 	
-	/** Value of the peak */
-	private double value;
+	/** Frequency of the peak */
+	private double frequency;
 	
 	/**
 	 * 
 	 * @param time
 	 * 		Time at which the Peak appears
 	 * @param value
-	 * 		Value represented by the Peak
+	 * 		Frequency represented by the Peak
 	 */
-	public Peak(int time, double value) {
+	public Peak(int time, double frequency) {
 		
 	}
 	
@@ -37,9 +37,9 @@ public class Peak {
 	/**
 	 * 
 	 * @return
-	 * 		The value represented by the Peak;
+	 * 		The frequency represented by the Peak;
 	 */
-	public double getValue() {
+	public double getFrequency() {
 		return -1;
 	}
 	

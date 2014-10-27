@@ -1,6 +1,7 @@
 package cse260.finalproject.fall2014.dan.harel;
 
 import java.awt.Graphics;
+import java.util.List;
 
 /**
  * GUI representation of the Spectrogram
@@ -22,6 +23,10 @@ public class SpectrogramPanel extends DisplayPanel {
 	public void paintComponent(Graphics g) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	public List<Peak> getPeaks() {
+		return null;
 	}
 
 }
