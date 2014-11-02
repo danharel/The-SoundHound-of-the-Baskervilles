@@ -25,7 +25,10 @@ public class Identifier extends JFrame {
 	 * Creates new Identifier object
 	 */
 	public Identifier() {
+
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		setVisible(true);
 	}
 
 	/**

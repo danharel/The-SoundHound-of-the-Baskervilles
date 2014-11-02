@@ -1,6 +1,7 @@
 package cse260.finalproject.fall2014.dan.harel;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,6 +33,14 @@ public class AudioClip {
 	 * 		Path of the file to open
 	 */
 	public AudioClip(String filePath) {
+		
+	}
+	
+	/**
+	 * Creates a new AudioClip using its File object
+	 * @param file
+	 */
+	public AudioClip(File file) {
 		
 	}
 	
@@ -69,5 +78,14 @@ public class AudioClip {
 	 */
 	public List<Peak> getPeaks() {
 		return null;
+	}
+	
+	public List<Peak> getPeaksAtTime(int time) {
+		ArrayList<Peak> newPeaks = new ArrayList<Peak>();
+		for (Peak peak : newPeaks) {
+			if (peak.getTime() == time)
+				newPeaks.add(peak);
+		}
+		return newPeaks;
 	}
 }

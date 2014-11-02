@@ -22,7 +22,8 @@ public class ProbeLocation {
 	 * 		Rime at which the Probe appears
 	 */
 	public ProbeLocation(int songId, int time) {
-		
+		this.songId = songId;
+		this.time = time;
 	}
 	
 	/**
@@ -33,7 +34,7 @@ public class ProbeLocation {
 	 * 		Time at which the Probe appears
 	 */
 	public ProbeLocation(AudioClip clip, int time) {
-		
+		this(clip.getTrackId(), time);
 	}
 	
 	/**
@@ -42,7 +43,7 @@ public class ProbeLocation {
 	 * 		Song ID associated with this ProbeLocation
 	 */
 	public int getId() {
-		return -1;
+		return songId;
 	}
 	
 	/**
@@ -51,7 +52,7 @@ public class ProbeLocation {
 	 * 		Time at which the probe appears
 	 */
 	public int getTime() {
-		return -1;
+		return time;
 	}
 	
 	/**
@@ -61,7 +62,7 @@ public class ProbeLocation {
 	 * @return
 	 * 		The difference in time between the two Probes.
 	 */
-	public static int getDelta(Probe p1, Probe p2) {
-		return -1;
+	public static int getDelta(ProbeLocation p1, ProbeLocation p2) {
+		return Math.abs(p1.getTime() - p2.getTime());
 	}
  }

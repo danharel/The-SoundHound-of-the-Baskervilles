@@ -8,9 +8,14 @@ import java.util.List;
  *
  */
 public class Spectra {
+	
+	/** Multiplier. Surrounding values must be less than this factor for a
+	 * value to be considered a peak;
+	 */
+	private final double differential = .2;
 
 	/** Samples represented by the Spectra */
-	private double samples;
+	private double[] samples;
 	
 	/**
 	 * 
@@ -18,7 +23,7 @@ public class Spectra {
 	 * 		Samples to represent by the Spectra
 	 */
 	public Spectra(double[] samples) {
-		
+		this.samples = samples;
 	}
 	
 	/** 

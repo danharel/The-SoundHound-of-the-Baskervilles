@@ -26,11 +26,8 @@ public class Probe {
 	 * 		Difference in time between the two frequencies
 	 */
 	public Probe(double f1, double f2, int time) {
-		
-	}
-	
-	@Override
-	public boolean equals(Object o) {
-		return false;
+		this.f1 = f1;
+		this.f2 = f2;
+		this.time = time;
 	}
 }

@@ -22,7 +22,8 @@ public class Peak {
 	 * 		Frequency represented by the Peak
 	 */
 	public Peak(int time, double frequency) {
-		
+		this.time = time;
+		this.frequency = frequency;
 	}
 	
 	/**
@@ -31,7 +32,7 @@ public class Peak {
 	 * 		Time at which the Peak appears
 	 */
 	public int getTime() {
-		return -1;
+		return time;
 	}
 	
 	/**
@@ -40,7 +41,7 @@ public class Peak {
 	 * 		The frequency represented by the Peak;
 	 */
 	public double getFrequency() {
-		return -1;
+		return frequency;
 	}
 	
 }

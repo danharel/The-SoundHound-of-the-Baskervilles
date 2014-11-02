@@ -1,12 +1,16 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -26,8 +30,19 @@ public class SongDatabase implements Serializable {
 	HashMap<AudioClip, List<Probe>> clipIndexes;
 	
 	/** File name in which the databases will be saved to and loaded from */
-	private final String FILE_NAME = "database.dat";
+	private static final String FILE_NAME = "database.dat";
 	
+	private SongDatabase() {
+		probeLocations = new HashMap<Probe, Set<ProbeLocation>>();
+		clipIndexes = new HashMap<AudioClip, List<Probe>>();
+	}
+	
+	public SongDatabase(HashMap<Probe, Set<ProbeLocation>> probeLocations,
+			HashMap<AudioClip, List<Probe>> clipIndexes) {
+		this.probeLocations = probeLocations;
+		this.clipIndexes = clipIndexes;
+	}
+
 	/**
 	 * 
 	 * @return
@@ -57,7 +72,7 @@ public class SongDatabase implements Serializable {
 	 * 		The number of probes associated with the given AudioClip
 	 */
 	public int getNumProbesIndexed(AudioClip clip) {
-		return -1;
+		return clipIndexes.get(clip).size();
 	}
 	
 	/**
@@ -68,7 +83,7 @@ public class SongDatabase implements Serializable {
 	 * 		List of locations of Probes that match the given Probe
 	 */
 	public Set<ProbeLocation> getMatches(Probe probe) {
-		return null;
+		return probeLocations.get(probe);
 	}
 	
 	/**
@@ -78,7 +93,13 @@ public class SongDatabase implements Serializable {
 	 * 		Clip to add
 	 */
 	public void addAudioClip(AudioClip clip) {
-		
+		Map<Probe,ProbeLocation> probesAndLocs = Extractor.getProbesAndLocation(clip);
+		List<Probe> probes = new ArrayList<Probe>();
+		probes.addAll(probesAndLocs.keySet());
+		clipIndexes.put(clip, probes);
+		for (Probe probe : probesAndLocs.keySet()) {
+			probeLocations.get(probe).add(probesAndLocs.get(probe));
+		}
 	}
 	
 	/**
@@ -121,15 +142,38 @@ public class SongDatabase implements Serializable {
 	/**
 	 * Writes the database to a file
 	 */
-	public static void saveDatabase() {
-		
+	public void saveDatabase() {
+		try {
+			ObjectOutputStream in = new ObjectOutputStream(new FileOutputStream(FILE_NAME));
+			in.writeObject(probeLocations);
+			in.writeObject(clipIndexes);
+			database = new SongDatabase(probeLocations, clipIndexes);
+			in.close();
+		}
+		catch(Exception e) {
+			System.out.printf("Database file %s not found. Creating new one.\n", FILE_NAME);
+			database = new SongDatabase();
+		}
 	}
 	
 	/**
 	 * Loads the database from a file
 	 */
 	private static void loadDatabase() {
-		
+		try {
+			ObjectInputStream in = new ObjectInputStream(new FileInputStream(FILE_NAME));
+			HashMap<Probe, Set<ProbeLocation>> probeLocations = (HashMap<Probe, Set<ProbeLocation>>) in.readObject();
+			HashMap<AudioClip, List<Probe>> clipIndexes = (HashMap<AudioClip, List<Probe>>) in.readObject();
+			database = new SongDatabase(probeLocations, clipIndexes);
+			in.close();
+		}
+		catch(Exception e) {
+			System.out.printf("Database file %s not found. Creating new one.\n", FILE_NAME);
+			database = new SongDatabase();
+		}
+		finally {
+			database.saveDatabase();
+		}
 	}
 	
 }
