@@ -5,14 +5,19 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -25,6 +30,8 @@ public class Indexer extends JFrame {
 	/** Database that stores songs */
 	private final SongDatabase database;
 	
+	private SongListPanel songList;
+	
 	/**
 	 * Creates a new JFrame for the Indexer application
 	 */
@@ -32,6 +39,8 @@ public class Indexer extends JFrame {
 		super("Audio Demo");
 		
 		database = SongDatabase.getSongDatabase();
+		songList = new SongListPanel(database);
+		
 		getContentPane().setLayout(new BorderLayout());
 		
 		JMenuBar mb = new JMenuBar();
@@ -57,9 +66,42 @@ public class Indexer extends JFrame {
 				addSongFromFolder();
 			}
 		});
+		
+		JMenuItem play = new JMenuItem("Play Song");
+		m.add(play);
+		play.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				playSelectedSong();
+			}
+		});
+		
+		JMenuItem delete = new JMenuItem("Delete Songs");
+		m.add(delete);
+		delete.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				removeSelectedSongs();
+			}
+		});
 
+		add(songList);
+		songList.setVisible(true);
+		
 		setSize(800,600);
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//pack();
+		
+		WindowListener exitListener = new WindowAdapter() {
+
+            @Override
+            public void windowClosing(WindowEvent e) {
+                //database.saveDatabase();
+            	System.exit(0);
+            }
+        };
+        addWindowListener(exitListener);
+		
 		setVisible(true);
 	}
 	
@@ -112,6 +154,7 @@ public class Indexer extends JFrame {
 	 */
 	public void addSong(AudioClip clip) {
 		database.addAudioClip(clip);
+		songList.addSong(clip);
 	}
 	
 	/**
@@ -121,6 +164,7 @@ public class Indexer extends JFrame {
 	private void addSong(File file) {
 		System.out.printf("Adding file: %s\n", file.getName());
 		addSong(new AudioClip(file));
+		songList.repaint();
 	}
 	
 	/**
@@ -128,6 +172,24 @@ public class Indexer extends JFrame {
 	 * @param clip
 	 */
 	public void deleteSong(AudioClip clip) {
-		
+		database.removeAudioClip(clip);
+		songList.removeSong(clip);
+	}
+	
+	/**
+	 * Plays the currently selected song
+	 */
+	public void playSelectedSong() {
+		List<AudioClip> selected = songList.getSelectedValuesList();
+		if (selected.size() > 1)
+			JOptionPane.showMessageDialog(songList, "Must select only one song!");
+		else
+			selected.get(0).play();
+	}
+	
+	public void removeSelectedSongs() {
+		List<AudioClip> selected = songList.getSelectedValuesList();
+		for (AudioClip clip : selected)
+			deleteSong(clip);
 	}
 }

@@ -1,31 +1,42 @@
 package cse260.finalproject.fall2014.dan.harel;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
 
 /**
  * Object representation of an audio file of arbitrary length.
  * @author danharel
  *
  */
-public class AudioClip {
+public class AudioClip implements Serializable {
+	
+	/** Path of the string */
+	private transient String path;
 
 	/** Name of the clip */
-	private String name;
+	private  String name;
 	
 	/** Clip representing the audio clip */
-	private Clip audio;
+	private transient File file;
 	
 	/** Array of bytes read in */
-	private byte[] bytes;
+	private transient byte[] bytes;
 	
 	/** List of Peaks that appear in the song. */
-	private List<Peak> peaks;
+	private transient List<Peak> peaks;
 	
 	/**
 	 * Creates a new AudioClip using the given file path
@@ -33,7 +44,7 @@ public class AudioClip {
 	 * 		Path of the file to open
 	 */
 	public AudioClip(String filePath) {
-		
+		this(new File(filePath));
 	}
 	
 	/**
@@ -41,12 +52,24 @@ public class AudioClip {
 	 * @param file
 	 */
 	public AudioClip(File file) {
-		
+		name = file.getName();
+		this.file = file;
+		path = file.getAbsolutePath();
 	}
 	
 	/** Plays the song */
 	public void play() {
-		
+		try {
+			AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+			AudioFormat format = stream.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			Clip clip = (Clip) AudioSystem.getLine(info);
+			clip.open(stream);
+			clip.start();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -68,7 +91,7 @@ public class AudioClip {
 	public int getTrackId() {
 		/*Will most likely just return the hash code. May be subject to change.
 		Depends on how well that works.*/
-		return -1;
+		return hashCode();
 	}
 	
 	/**
@@ -77,7 +100,7 @@ public class AudioClip {
 	 * 		A list of peaks in the clip
 	 */
 	public List<Peak> getPeaks() {
-		return null;
+		return peaks;
 	}
 	
 	public List<Peak> getPeaksAtTime(int time) {
@@ -88,4 +111,29 @@ public class AudioClip {
 		}
 		return newPeaks;
 	}
+	
+	@Override
+	public String toString() {
+		return name;
+	}
+	
+	/*private void writeObject(ObjectOutputStream out) throws IOException {
+		out.defaultWriteObject();
+		out.writeObject(path);
+		out.writeObject(name);
+		out.writeObject(bytes);
+		out.writeObject(peaks);
+	}
+	
+	private void readObject(ObjectInputStream in)
+			throws ClassNotFoundException, IOException {
+		// default deserialization
+		in.defaultReadObject();
+		path = (String) in.readObject();
+		name = (String) in.readObject();
+		bytes = (byte[]) in.readObject();
+		peaks = (List<Peak>) in.readObject();
+		file = new File(path);
+	}*/
+
 }

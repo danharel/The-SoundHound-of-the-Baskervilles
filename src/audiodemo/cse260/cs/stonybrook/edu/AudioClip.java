@@ -10,7 +10,12 @@ import javax.sound.sampled.*;
  * @version 20140918
  */
 
-public class AudioClip {
+public class AudioClip implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	/** Audio format associated with the clip. */
 	private AudioFormat format;

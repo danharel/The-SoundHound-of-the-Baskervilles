@@ -9,6 +9,9 @@ import java.util.List;
  */
 public class Spectra {
 	
+	/** Size of each spectra */
+	public static final int N = 8000;
+	
 	/** Multiplier. Surrounding values must be less than this factor for a
 	 * value to be considered a peak;
 	 */
