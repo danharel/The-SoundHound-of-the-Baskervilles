@@ -21,17 +21,22 @@ import java.util.Set;
  */
 public class SongDatabase implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 19789634L;
+
 	/** Singleton database */
 	public static SongDatabase database = null;
 	
 	/** Map of a Probe to its locations */
-	HashMap<Probe, Set<ProbeLocation>> probeLocations;
+	private HashMap<Probe, Set<ProbeLocation>> probeLocations;
 	
 	/** Map of an AudioClip to the Probes extracted */ 
-	HashMap<AudioClip, List<Probe>> clipsIndexed;
+	private HashMap<AudioClip, List<Probe>> clipsIndexed;
 	
 	/** File name in which the databases will be saved to and loaded from */
-	private static final String SAVE_PATH = "./database.dat";
+	private static final String SAVE_PATH = "database.dat";
 	
 	private SongDatabase() {
 		probeLocations = new HashMap<Probe, Set<ProbeLocation>>();
@@ -162,23 +167,38 @@ public class SongDatabase implements Serializable {
 	private static void loadDatabase() {
 		try {
 			File file = new File(SAVE_PATH);
-			if (!file.exists())
+			/*
+			if (!file.exists()) {
 				file.createNewFile();
-			ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-			HashMap<Probe, Set<ProbeLocation>> probeLocations = (HashMap<Probe, Set<ProbeLocation>>) in.readObject();
-			HashMap<AudioClip, List<Probe>> clipIndexes = (HashMap<AudioClip, List<Probe>>) in.readObject();
-			database = new SongDatabase(probeLocations, clipIndexes);
-			in.close();
+				database = new SongDatabase();
+			}*/
+			//else {
+				System.out.println(file.getAbsolutePath());
+				ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+				HashMap<Probe, Set<ProbeLocation>> probeLocations = (HashMap<Probe, Set<ProbeLocation>>) in.readObject();
+				HashMap<AudioClip, List<Probe>> clipsIndexed = (HashMap<AudioClip, List<Probe>>) in.readObject();
+				database = new SongDatabase(probeLocations, clipsIndexed);
+				in.close();
+			//}
 		}
 		catch(Exception e) {
 			System.out.printf("Unable to read from database file %s. Creating new one.\n", SAVE_PATH);
 			database = new SongDatabase();
 			System.out.println(e.getCause());
-			e.printStackTrace();
+			File file = new File(SAVE_PATH);
+			try {
+				file.createNewFile();
+			}
+			catch (IOException e2) {
+				System.out.println("Unable to create file for unknown reason.");
+			}
+			catch (SecurityException e2) {
+				System.out.println("Permission to create file denied. Please select a different save location.");
+			}
+			//e.printStackTrace();
 		}
 		finally {
 			//database.saveDatabase();
 		}
 	}
-	
 }

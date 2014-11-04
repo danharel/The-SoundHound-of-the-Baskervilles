@@ -65,12 +65,12 @@ public class Spectrogram extends JPanel {
 			for (int j = 0; j < powerArray.length; j++) {
 				//Calculate the grey-scale value of the color to draw
 				float colorVal = (float)(powerArray[j]/max);
-				Color color = new Color(1-colorVal, 1-colorVal, 1-colorVal, 1 );
+				Color color = new Color(colorVal, colorVal, colorVal, 1 );
 				//Set the color
 				g.setColor(color);
 				//Draw the color
 				//Divide j by 15 to fit it in the screen.
-				if ((int) (j/15) > currHeight) {
+				if ((int) (j/1) > currHeight) {
 					currHeight = j/15;
 					currHeightMax = Double.MIN_VALUE;
 				}

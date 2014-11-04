@@ -21,22 +21,28 @@ import javax.sound.sampled.DataLine;
  * @author danharel
  *
  */
+// Later implement functionality to return an iterator for the samples rather than the entire array
 public class AudioClip implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4539836400380219095L;
+
 	/** Path of the string */
-	private transient String path;
+	private String path;
 
 	/** Name of the clip */
-	private  String name;
+	private String name;
 	
 	/** Clip representing the audio clip */
-	private transient File file;
+	private File file;
 	
 	/** Array of bytes read in */
-	private transient byte[] bytes;
+	private double[] samples;
 	
 	/** List of Peaks that appear in the song. */
-	private transient List<Peak> peaks;
+	private List<Peak> peaks;
 	
 	/**
 	 * Creates a new AudioClip using the given file path
@@ -55,12 +61,64 @@ public class AudioClip implements Serializable {
 		name = file.getName();
 		this.file = file;
 		path = file.getAbsolutePath();
+		
+		try {
+			AudioInputStream in = AudioSystem.getAudioInputStream(file);
+			AudioFormat format = in.getFormat();
+			
+			//WRITTEN BY PROFESSOR STARK. REMOVE LATER
+			// Verify that the input stream has the format we need.
+			// Right now this is 16-bit signed PCM format.
+			if(format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED)
+				throw new IllegalArgumentException("Signed PCM format required.");
+			int channels = format.getChannels();
+			if(channels != 1 && channels != 2)
+				throw new IllegalArgumentException("Mono or stereo required.");
+			int bytesPerFrame = format.getFrameSize();
+			int bytesPerSample = bytesPerFrame/channels;
+			if(bytesPerSample != 2)
+				throw new IllegalArgumentException("16-bit samples required.");
+
+			boolean bigEndian = format.isBigEndian();
+			long length = in.getFrameLength();
+			if(length > Integer.MAX_VALUE)
+				throw new IllegalArgumentException("Clip too long");
+
+			// Convert the samples in the original stream to floating point.
+			// Stereo is reduced to mono by averaging the channel values.
+			samples = new double[(int)length];
+			byte[] buf = new byte[bytesPerFrame];
+			for(int i = 0; i < length; i++) {
+				double v = 0.0;
+				in.read(buf);
+				for(int j = 0; j < channels; j++) {
+					byte b1 = buf[2*j];
+					byte b2 = buf[2*j+1];
+					if(!bigEndian) {
+						byte tmp = b1;
+						b1 = b2;
+						b2 = tmp;
+					}
+					int s = ((b1<<8) | (b2&0xff));
+					v += (s/32768.0);
+				}
+				v /= channels;
+				samples[i] = v;
+				//System.out.println(v);
+			}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/** Plays the song */
 	public void play() {
+		
 		try {
-			AudioInputStream stream = AudioSystem.getAudioInputStream(file);
+			File f = new File(path);
+			AudioInputStream stream = AudioSystem.getAudioInputStream(f);
 			AudioFormat format = stream.getFormat();
 			DataLine.Info info = new DataLine.Info(Clip.class, format);
 			Clip clip = (Clip) AudioSystem.getLine(info);
@@ -72,15 +130,8 @@ public class AudioClip implements Serializable {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param file
-	 * 		File to get the AudioFormat of
-	 * @return
-	 * 		AudioFormat of the given file
-	 */
-	private AudioFormat getAudioFormat(File file) {
-		return null;
+	public double[] getSamples() {
+		return samples;
 	}
 	
 	/**
@@ -117,11 +168,11 @@ public class AudioClip implements Serializable {
 		return name;
 	}
 	
-	/*private void writeObject(ObjectOutputStream out) throws IOException {
+	private void writeObject(ObjectOutputStream out) throws IOException {
 		out.defaultWriteObject();
 		out.writeObject(path);
 		out.writeObject(name);
-		out.writeObject(bytes);
+		out.writeObject(samples);
 		out.writeObject(peaks);
 	}
 	
@@ -131,9 +182,18 @@ public class AudioClip implements Serializable {
 		in.defaultReadObject();
 		path = (String) in.readObject();
 		name = (String) in.readObject();
-		bytes = (byte[]) in.readObject();
+		samples = (double[]) in.readObject();
 		peaks = (List<Peak>) in.readObject();
 		file = new File(path);
-	}*/
+	}
+	
+	public double getMaxAmplitude() {
+		double max = Double.MIN_VALUE;
+		for (double d : samples) {
+			if (Math.abs(d) > max)
+				max = d;
+		}
+		return max;
+	}
 
 }

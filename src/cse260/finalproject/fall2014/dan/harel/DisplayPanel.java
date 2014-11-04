@@ -1,5 +1,6 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.awt.Dimension;
 import java.awt.Graphics;
 
 import javax.swing.JPanel;
@@ -13,7 +14,7 @@ import javax.swing.JPanel;
 public abstract class DisplayPanel extends JPanel {
 	
 	/** AudioClip that this DisplayPanel represents */
-	private AudioClip clip;
+	protected AudioClip clip;
 	
 	/**
 	 * Creates a new DisplayPanel.
@@ -21,7 +22,8 @@ public abstract class DisplayPanel extends JPanel {
 	 * 		AudioClip that the DisplayPanel represents
 	 */
 	public DisplayPanel(AudioClip clip) {
-		
+		this.clip = clip;
+		setPreferredSize(new Dimension(800, 100));
 	}
 	
 	/**
@@ -55,11 +57,5 @@ public abstract class DisplayPanel extends JPanel {
 	public int getSamplesPerPixel() {
 		return -1;
 	}
-	
-	/**
-	 * Redraws the JPanel.
-	 */
-	@Override
-	public abstract void paintComponent(Graphics g);
 	
 }

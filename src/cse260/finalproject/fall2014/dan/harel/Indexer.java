@@ -18,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
@@ -30,13 +31,15 @@ public class Indexer extends JFrame {
 	/** Database that stores songs */
 	private final SongDatabase database;
 	
+	private WaveformPanel waveform;
+	
 	private SongListPanel songList;
 	
 	/**
 	 * Creates a new JFrame for the Indexer application
 	 */
 	public Indexer() {
-		super("Audio Demo");
+		super("Indexer");
 		
 		database = SongDatabase.getSongDatabase();
 		songList = new SongListPanel(database);
@@ -85,7 +88,7 @@ public class Indexer extends JFrame {
 			}
 		});
 
-		add(songList);
+		add(new JScrollPane(songList));
 		songList.setVisible(true);
 		
 		setSize(800,600);
@@ -93,10 +96,9 @@ public class Indexer extends JFrame {
 		//pack();
 		
 		WindowListener exitListener = new WindowAdapter() {
-
             @Override
             public void windowClosing(WindowEvent e) {
-                //database.saveDatabase();
+                database.saveDatabase();
             	System.exit(0);
             }
         };
@@ -116,7 +118,7 @@ public class Indexer extends JFrame {
 	    		System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
 	    		File file = chooser.getSelectedFile();
 	    		addSong(file);
-;	    	}
+	    	}
 	    	catch (Exception e) {
 	    		
 	    	}

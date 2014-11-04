@@ -18,7 +18,12 @@ import javax.swing.ListCellRenderer;
  * @author danharel
  *
  */
-public class SongListPanel extends JList {
+public class SongListPanel extends JList<AudioClip> {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private SongDatabase database;
 	
@@ -29,13 +34,18 @@ public class SongListPanel extends JList {
 		
 		this.database = database;
 		
-		songList = new DefaultListModel();
+		songList = new DefaultListModel<AudioClip>();
 		for (AudioClip clip : database.getSongsIndexed())
 			songList.addElement(clip);
 		setModel(songList);
 	}
 
 	class CellRenderer extends JLabel implements ListCellRenderer<Object> {
+
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
 
 		@Override
 		public Component getListCellRendererComponent(

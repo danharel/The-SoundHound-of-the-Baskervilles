@@ -36,6 +36,8 @@ public class AudioDemo extends JFrame {
 	/** The currently displayed AudioClip, if any, otherwise null. */
 	private AudioClip currentClip;
 
+	//Synchronized scrolling: http://www.coderanch.com/t/339632/GUI/java/synchronize-ScrollPane
+	
 	/** WaveformPanel displaying the current clip, if any, otherwise null. */
 	private WaveformPanel clipPanel;
 	
