@@ -29,7 +29,7 @@ public class SpectrogramPanel extends DisplayPanel {
 		//ith segment of length N in the song.
 		for (int i = 0; i < clip.getSamples().length/N; i++) {
 			
-			Spectra spectra = new Spectra(Arrays.copyOfRange(clip.getSamples(), N*i, N*i+N));
+			Spectra spectra = new Spectra(i, Arrays.copyOfRange(clip.getSamples(), N*i, N*i+N));
 			
 			double[] powerArray = spectra.getPowerArray();
 			
@@ -72,10 +72,13 @@ public class SpectrogramPanel extends DisplayPanel {
 					g.fillRect((int) (N/samplesPerPixel)*i, currHeight, (int) (N/samplesPerPixel), 1);
 				}
 			}
+			
+			// Draw the peaks. Currently horribly wrong
 			g.setColor(Color.YELLOW);
 			List<Peak> peaks = spectra.getPeaks();
 			for (Peak peak : peaks) {
 				//Draw the peak
+				g.fillRect((int) (N/samplesPerPixel)*i, peak.getTime()%N, (int) (N/samplesPerPixel), 1);
 				//g.fillRect((int) (N/samplesPerPixel)*i, peakIndex/15, (int) (N/samplesPerPixel), 1);
 			}
 		}

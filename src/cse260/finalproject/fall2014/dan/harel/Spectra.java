@@ -15,10 +15,13 @@ public class Spectra {
 	/** Size of each spectra */
 	public static final int N = 5000;
 	
+	/** Number of this Spectra. Ex: the first spectra has number = 0; */
+	private int number;
+	
 	/** Multiplier. Surrounding values must be less than this factor for a
 	 * value to be considered a peak;
 	 */
-	private final double differential = .2;
+	private final double differential = .5;
 
 	/** Samples represented by the Spectra */
 	private double[] samples;
@@ -28,7 +31,8 @@ public class Spectra {
 	 * @param samples
 	 * 		Samples to represent by the Spectra
 	 */
-	public Spectra(double[] samples) {
+	public Spectra(int number, double[] samples) {
+		this.number = number;
 		this.samples = samples;
 	}
 	
@@ -71,7 +75,15 @@ public class Spectra {
 	 * 		List of Peaks of the Spectra
 	 */
 	public List<Peak> getPeaks() {
-		return new ArrayList<Peak>();
+		List<Peak> peaks = new ArrayList<Peak>();
+		double[] power = getPowerArray();
+		for (int i = 1; i < power.length-1; i++) {
+			if (power[i]*differential > power[i-1] &&
+				power[i]*differential > power[i+1])
+			peaks.add(new Peak(number*N+i,samples[i]));
+		}
+		System.out.println(peaks.size());
+		return peaks;
 	}
 	
 }
