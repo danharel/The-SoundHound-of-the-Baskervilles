@@ -14,28 +14,43 @@ import java.util.List;
  *
  */
 public class SpectrogramPanel extends DisplayPanel {
-	
+
 	/** Size of a Spectra */
-	private static final int N = Spectra.N;
+	private static final int samplesPerSpectra = Spectra.samplesPerSpectra;
+
+	private static final int spectraInterval = Spectra.spectraInterval;
 
 	public SpectrogramPanel(AudioClip clip) {
 		super(clip);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@Override
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		
+		g.setColor(Color.BLACK);
+		g.fillRect(0,0,getWidth(), getHeight());
+
+		//Calculate the number of samples per pixel.
+		long length = clip.getSamples().length;
+		double samplesPerPixel = length / getWidth();
+
 		//ith segment of length N in the song.
-		for (int i = 0; i < clip.getSamples().length/N; i++) {
-			
-			Spectra spectra = new Spectra(i, Arrays.copyOfRange(clip.getSamples(), N*i, N*i+N));
-			
+
+		for (int i = 1; i < clip.getSamples().length/spectraInterval; i++) {
+
+			Spectra spectra = new Spectra(i, Arrays.copyOfRange(
+					clip.getSamples(), 
+					spectraInterval*i - samplesPerSpectra/2, 
+					spectraInterval*i + samplesPerSpectra/2)
+					);
+
 			double[] powerArray = spectra.getPowerArray();
-			
+
 			for (int j = 0; j < powerArray.length; j++)
 				powerArray[j] = Math.log(powerArray[j]);
-			
+
 			//Find the max value in the power array.
 			double max = Double.MIN_VALUE;
 			double min = Double.MAX_VALUE;
@@ -44,44 +59,57 @@ public class SpectrogramPanel extends DisplayPanel {
 					max = d;
 				if (d < min)
 					min = d;
-			}				
-			
-			//Calculate the number of samples per pixel.
-			long length = clip.getSamples().length;
-			double samplesPerPixel = length / getWidth();
-			
+			}
+
 			//The height that the next rectangle will be drawn at.
 			int currHeight = 0;
-			double currHeightMax = Double.MIN_NORMAL;
-			
+			double currMax = Double.MIN_NORMAL;
+
 			//jth sample in the power array
 			for (int j = 0; j < powerArray.length; j++) {
 				//Calculate the grey-scale value of the color to draw
 				float colorVal = (float)((powerArray[j]-min)/(max-min));
 				Color color = new Color(colorVal, colorVal, colorVal, 1 );
+
 				//Set the color
 				g.setColor(color);
+
 				//Draw the color
-				//Divide j by 15 to fit it in the screen.
-				if ((int) (j/15) > currHeight) {
-					currHeight = j/15;
-					currHeightMax = Double.MIN_VALUE;
+				//Divide j by 15 to fit it in the screen. Figure this out later
+				if (/* 2*j*(samplesPerSpectra/samplesPerPixel*2)/getHeight() */ j/5 > currHeight) {
+					currHeight = j/5;
+					//currHeight = (int)(2*j*(samplesPerSpectra/samplesPerPixel)/getHeight());
+					currMax = Double.MIN_VALUE;
 				}
-				if (powerArray[j] > currHeightMax) {
-					currHeightMax = powerArray[j];
-					g.fillRect((int) (N/samplesPerPixel)*i, currHeight, (int) (N/samplesPerPixel), 1);
+
+				if (colorVal > currMax) {
+					currMax = colorVal;
+					g.fillRect(
+							(int) ((spectraInterval*i-samplesPerSpectra/4)/samplesPerPixel), 
+							currHeight, 
+							(int) (samplesPerSpectra/samplesPerPixel),
+							1
+							);
 				}
+				
 			}
 			
-			// Draw the peaks. Currently horribly wrong
-			g.setColor(Color.YELLOW);
-			List<Peak> peaks = spectra.getPeaks();
+		}
+		
+		g.setColor(Color.YELLOW);
+		for (List<Peak> peaks : clip.getPeaks()) {
 			for (Peak peak : peaks) {
-				//Draw the peak
-				g.fillRect((int) (N/samplesPerPixel)*i, peak.getTime()%N, (int) (N/samplesPerPixel), 1);
-				//g.fillRect((int) (N/samplesPerPixel)*i, peakIndex/15, (int) (N/samplesPerPixel), 1);
+				int x = (int)((peak.getTime()-samplesPerSpectra/4)/samplesPerPixel);
+				//int y = (int)(getHeight()*peak.getFrequency()/samplesPerSpectra);
+				int y = (int)(peak.getFrequency()/1);
+				int width = (int)(samplesPerSpectra/samplesPerPixel);
+				int height = 1;
+				g.fillRect(x,y,width,height);
+				revalidate();
+				//System.out.printf("x: %d\ny: %d\n\n", peak.getTime(), (int) (5*getHeight()*peak.getFrequency()/samplesPerSpectra));
 			}
 		}
-	}
+		//g.fillRect(100,100,100,100);
 
+	}
 }

@@ -30,4 +30,8 @@ public class Probe {
 		this.f2 = f2;
 		this.time = time;
 	}
+	
+	public Probe(Peak p1, Peak p2) {
+		this(p1.getFrequency(), p2.getFrequency(), p2.getTime()-p1.getTime());
+	}
 }

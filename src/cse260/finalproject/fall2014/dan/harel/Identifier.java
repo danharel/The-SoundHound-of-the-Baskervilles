@@ -101,6 +101,7 @@ public class Identifier extends JFrame {
 	    	    add(new JScrollPane(spectrogram));
 	    	    spectrogram.setVisible(true);
 	    	    pack();
+	    	    revalidate();
 	    	}
 	    	catch (Exception e) {
 	    		e.printStackTrace();

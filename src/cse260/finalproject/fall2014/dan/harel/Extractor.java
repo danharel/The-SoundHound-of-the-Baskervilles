@@ -1,5 +1,7 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,21 +9,56 @@ import java.util.Map;
 public class Extractor {
 	
 	/** Difference in time required for two peaks to get paired into a Probe */
-	private static int timeDiff = 1; 
+	private static int timeDiff = 1;
 	
-	/** AudioClip to be extracted */
-	private static AudioClip clip;
+	public static List<Peak>[] getPeaks(AudioClip clip) {
+		double[] samples = clip.getSamples();
+		List<Peak>[] peaks = (List<Peak>[]) new ArrayList[samples.length/Spectra.spectraInterval];
+		peaks[0] = new ArrayList<Peak>();
+		for (int i = 1; i < peaks.length; i++) {
+			Spectra s = new Spectra(i, Arrays.copyOfRange(
+					samples, 
+					i*Spectra.spectraInterval - Spectra.samplesPerSpectra/2, 
+					i*Spectra.spectraInterval + Spectra.samplesPerSpectra/2
+					));
+			peaks[i] = s.getPeaks();
+			//System.out.println(peaks[i]);
+		}
+		return peaks;
+	}
 	
 	public static List<Probe> getProbes(AudioClip clip) {
-		Extractor.clip = clip;
-		for (Peak peak : clip.getPeaks()) {
-			
+		List<Probe> probes = new ArrayList<Probe>();
+		
+		List<Peak>[] peakLists = getPeaks(clip);
+		for (int i = 0; i < peakLists.length - 1; i++) {
+			List<Peak> peaks = peakLists[i];
+			for (Peak peak1 : peaks) {
+				for (Peak peak2 : peakLists[i+(AudioClip.samplesPerSecond*timeDiff)/Spectra.spectraInterval]) {
+					probes.add(new Probe (peak1, peak2));
+				}
+			}
 		}
-		return null;
+		return probes;
 	}
 	
 	public static Map<Probe, ProbeLocation> getProbesAndLocation(AudioClip clip) {
-		return new HashMap<Probe, ProbeLocation>();
+		
+		Map<Probe, ProbeLocation> probes = new HashMap<Probe, ProbeLocation>();
+		
+		List<Peak>[] peakLists = getPeaks(clip);
+		for (int i = 0; i < peakLists.length - 1; i++) {
+			List<Peak> peaks = peakLists[i];
+			for (Peak peak1 : peaks) {
+				for (Peak peak2 : peakLists[i+(AudioClip.samplesPerSecond*timeDiff)/Spectra.spectraInterval]) {
+					probes.put(
+							new Probe (peak1, peak2), 
+							new ProbeLocation(clip.getTrackId(),i*Spectra.spectraInterval)
+							);
+				}
+			}
+		}
+		return probes;
 	}
 
 }

@@ -28,6 +28,9 @@ public class AudioClip implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 4539836400380219095L;
+	
+	/** Sample rate of a clip. Figure out how to convert a song to this bitrate */
+	public static final int samplesPerSecond = 8000;
 
 	/** Path of the string */
 	private String path;
@@ -42,7 +45,7 @@ public class AudioClip implements Serializable {
 	private double[] samples;
 	
 	/** List of Peaks that appear in the song. */
-	private List<Peak> peaks;
+	private List<Peak>[] peaks;
 	
 	/**
 	 * Creates a new AudioClip using the given file path
@@ -111,6 +114,8 @@ public class AudioClip implements Serializable {
 			e.printStackTrace();
 		}
 		
+		peaks = Extractor.getPeaks(this);
+		
 	}
 	
 	/** Plays the song */
@@ -150,7 +155,7 @@ public class AudioClip implements Serializable {
 	 * @return
 	 * 		A list of peaks in the clip
 	 */
-	public List<Peak> getPeaks() {
+	public List<Peak>[] getPeaks() {
 		return peaks;
 	}
 	
@@ -183,7 +188,7 @@ public class AudioClip implements Serializable {
 		path = (String) in.readObject();
 		name = (String) in.readObject();
 		samples = (double[]) in.readObject();
-		peaks = (List<Peak>) in.readObject();
+		peaks = (List<Peak>[]) in.readObject();
 		file = new File(path);
 	}
 	
