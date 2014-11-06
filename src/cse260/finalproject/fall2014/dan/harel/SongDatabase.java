@@ -33,18 +33,18 @@ public class SongDatabase implements Serializable {
 	private HashMap<Probe, Set<ProbeLocation>> probeLocations;
 	
 	/** Map of an AudioClip to the Probes extracted */ 
-	private HashMap<AudioClip, List<Probe>> clipsIndexed;
+	private HashMap<ClipIdentifier, List<Probe>> clipsIndexed;
 	
 	/** File name in which the databases will be saved to and loaded from */
 	private static final String SAVE_PATH = "database.dat";
 	
 	private SongDatabase() {
 		probeLocations = new HashMap<Probe, Set<ProbeLocation>>();
-		clipsIndexed = new HashMap<AudioClip, List<Probe>>();
+		clipsIndexed = new HashMap<ClipIdentifier, List<Probe>>();
 	}
 	
 	public SongDatabase(HashMap<Probe, Set<ProbeLocation>> probeLocations,
-			HashMap<AudioClip, List<Probe>> clipIndexes) {
+			HashMap<ClipIdentifier, List<Probe>> clipIndexes) {
 		this.probeLocations = probeLocations;
 		this.clipsIndexed = clipIndexes;
 	}
@@ -67,7 +67,7 @@ public class SongDatabase implements Serializable {
 	 * @return
 	 * 		Set of all songs that have been indexed.
 	 */
-	public Set<AudioClip> getSongsIndexed() {
+	public Set<ClipIdentifier> getSongsIndexed() {
 		return clipsIndexed.keySet();
 	}
 	
@@ -78,7 +78,7 @@ public class SongDatabase implements Serializable {
 	 * 		The number of probes associated with the given AudioClip
 	 */
 	public int getNumProbesIndexed(AudioClip clip) {
-		return clipsIndexed.get(clip).size();
+		return clipsIndexed.get(clip.getIdentifier()).size();
 	}
 	
 	/**
@@ -99,13 +99,25 @@ public class SongDatabase implements Serializable {
 	 * 		Clip to add
 	 */
 	public void addAudioClip(AudioClip clip) {
+		System.out.println("getting probes and locations!");
 		Map<Probe,ProbeLocation> probesAndLocs = Extractor.getProbesAndLocation(clip);
+		System.out.println("Successfully obtained probes and locations!");
 		List<Probe> probes = new ArrayList<Probe>();
+		System.out.println("Successfully obtained probes and locations!2");
 		probes.addAll(probesAndLocs.keySet());
-		clipsIndexed.put(clip, probes);
+		System.out.println("Probes: " + probes.size());
+		System.out.println("Successfully obtained probes and locations!3");
+		
+		// too much processing here. Find a way to cut down the runtime.
+		clipsIndexed.put(clip.getIdentifier(), probes);
+		System.out.println(probesAndLocs.keySet().size());
 		for (Probe probe : probesAndLocs.keySet()) {
+			//System.out.println(probeLocations.get(probe));
+			if (!probeLocations.containsKey(probe))
+				probeLocations.put(probe, new HashSet<ProbeLocation>());
 			probeLocations.get(probe).add(probesAndLocs.get(probe));
 		}
+		System.out.println("Successfully obtained probes and locations!5");
 		
 	}
 	
@@ -115,6 +127,10 @@ public class SongDatabase implements Serializable {
 	 * 		Clip to remove from the index
 	 */
 	public void removeAudioClip(AudioClip clip) {
+		removeAudioClip(clip.getIdentifier());
+	}
+	
+	public void removeAudioClip(ClipIdentifier clip) {
 		/* Don't forget to remove the corresponding probe locations from
 		 * probeLocations. That is, go trough the list of Probes for that
 		 * AudioClip, then remove all ProbeLocations with a songID that matches
@@ -155,7 +171,7 @@ public class SongDatabase implements Serializable {
 		}
 		catch(Exception e) {
 			System.out.printf("Unable to save database\n", SAVE_PATH);
-			//e.printStackTrace();
+			e.printStackTrace();
 			//System.out.println(e.getMessage().toString());
 			database = new SongDatabase();
 		}
@@ -176,18 +192,20 @@ public class SongDatabase implements Serializable {
 				System.out.println(file.getAbsolutePath());
 				ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 				HashMap<Probe, Set<ProbeLocation>> probeLocations = (HashMap<Probe, Set<ProbeLocation>>) in.readObject();
-				HashMap<AudioClip, List<Probe>> clipsIndexed = (HashMap<AudioClip, List<Probe>>) in.readObject();
+				HashMap<ClipIdentifier, List<Probe>> clipsIndexed = (HashMap<ClipIdentifier, List<Probe>>) in.readObject();
 				database = new SongDatabase(probeLocations, clipsIndexed);
 				in.close();
 			//}
 		}
 		catch(Exception e) {
 			System.out.printf("Unable to read from database file %s. Creating new one.\n", SAVE_PATH);
+			e.printStackTrace();
 			database = new SongDatabase();
 			System.out.println(e.getCause());
 			File file = new File(SAVE_PATH);
 			try {
 				file.createNewFile();
+				System.out.println("Successfully created new file");
 			}
 			catch (IOException e2) {
 				System.out.println("Unable to create file for unknown reason.");

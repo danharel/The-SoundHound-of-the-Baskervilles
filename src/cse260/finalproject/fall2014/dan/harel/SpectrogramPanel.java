@@ -76,8 +76,8 @@ public class SpectrogramPanel extends DisplayPanel {
 
 				//Draw the color
 				//Divide j by 15 to fit it in the screen. Figure this out later
-				if (/* 2*j*(samplesPerSpectra/samplesPerPixel*2)/getHeight() */ j/5 > currHeight) {
-					currHeight = j/5;
+				if (/* 2*j*(samplesPerSpectra/samplesPerPixel*2)/getHeight() */ j > currHeight) {
+					currHeight = j;
 					//currHeight = (int)(2*j*(samplesPerSpectra/samplesPerPixel)/getHeight());
 					currMax = Double.MIN_VALUE;
 				}
@@ -104,7 +104,7 @@ public class SpectrogramPanel extends DisplayPanel {
 				int y = (int)(peak.getFrequency()/1);
 				int width = (int)(samplesPerSpectra/samplesPerPixel);
 				int height = 1;
-				g.fillRect(x,y,width,height);
+				//g.fillRect(x,y,width,height);
 				revalidate();
 				//System.out.printf("x: %d\ny: %d\n\n", peak.getTime(), (int) (5*getHeight()*peak.getFrequency()/samplesPerSpectra));
 			}

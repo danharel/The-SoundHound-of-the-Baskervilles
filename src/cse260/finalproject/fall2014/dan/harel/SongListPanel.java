@@ -18,7 +18,7 @@ import javax.swing.ListCellRenderer;
  * @author danharel
  *
  */
-public class SongListPanel extends JList<AudioClip> {
+public class SongListPanel extends JList<ClipIdentifier> {
 
 	/**
 	 * 
@@ -27,43 +27,26 @@ public class SongListPanel extends JList<AudioClip> {
 
 	private SongDatabase database;
 	
-	DefaultListModel<AudioClip> songList;
+	DefaultListModel<ClipIdentifier> songList;
 
 	public SongListPanel(SongDatabase database) {
 		super();
 		
 		this.database = database;
 		
-		songList = new DefaultListModel<AudioClip>();
-		for (AudioClip clip : database.getSongsIndexed())
+		songList = new DefaultListModel<ClipIdentifier>();
+		for (ClipIdentifier clip : database.getSongsIndexed())
 			songList.addElement(clip);
 		setModel(songList);
 	}
-
-	class CellRenderer extends JLabel implements ListCellRenderer<Object> {
-
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Component getListCellRendererComponent(
-				JList<? extends Object> list, Object value, int index,
-				boolean isSelected, boolean cellHasFocus) {
-			// TODO Auto-generated method stub
-			setText("Hello!");
-			
-			return this;
-		}
-	     
-	}
 	
 	public void addSong(AudioClip clip) {
-		songList.addElement(clip);
+		songList.addElement(clip.getIdentifier());
+		revalidate();
+		System.out.println("Song added to list!");
 	}
 	
-	public void removeSong(AudioClip clip) {
+	public void removeSong(ClipIdentifier clip) {
 		songList.removeElement(clip);
 	}
 }

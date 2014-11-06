@@ -19,7 +19,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		identifier = new Identifier();
-		//indexer = new Indexer();
+		indexer = new Indexer();
 	}
 
 }

@@ -47,6 +47,9 @@ public class AudioClip implements Serializable {
 	/** List of Peaks that appear in the song. */
 	private List<Peak>[] peaks;
 	
+	/** Identifies the clip */
+	private ClipIdentifier identifier;
+	
 	/**
 	 * Creates a new AudioClip using the given file path
 	 * @param filePath
@@ -116,6 +119,8 @@ public class AudioClip implements Serializable {
 		
 		peaks = Extractor.getPeaks(this);
 		
+		identifier = new ClipIdentifier(this);
+		
 	}
 	
 	/** Plays the song */
@@ -168,6 +173,14 @@ public class AudioClip implements Serializable {
 		return newPeaks;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public ClipIdentifier getIdentifier() {
+		return identifier;
+	}
+	
 	@Override
 	public String toString() {
 		return name;
@@ -183,6 +196,7 @@ public class AudioClip implements Serializable {
 	
 	private void readObject(ObjectInputStream in)
 			throws ClassNotFoundException, IOException {
+		System.out.println("Reading in file" + name);
 		// default deserialization
 		in.defaultReadObject();
 		path = (String) in.readObject();

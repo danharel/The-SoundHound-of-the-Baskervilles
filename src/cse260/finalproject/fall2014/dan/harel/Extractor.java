@@ -32,8 +32,7 @@ public class Extractor {
 		
 		List<Peak>[] peakLists = getPeaks(clip);
 		for (int i = 0; i < peakLists.length - 1; i++) {
-			List<Peak> peaks = peakLists[i];
-			for (Peak peak1 : peaks) {
+			for (Peak peak1 : peakLists[i]) {
 				for (Peak peak2 : peakLists[i+(AudioClip.samplesPerSecond*timeDiff)/Spectra.spectraInterval]) {
 					probes.add(new Probe (peak1, peak2));
 				}
@@ -46,17 +45,17 @@ public class Extractor {
 		
 		Map<Probe, ProbeLocation> probes = new HashMap<Probe, ProbeLocation>();
 		
-		List<Peak>[] peakLists = getPeaks(clip);
-		for (int i = 0; i < peakLists.length - 1; i++) {
-			List<Peak> peaks = peakLists[i];
-			for (Peak peak1 : peaks) {
-				for (Peak peak2 : peakLists[i+(AudioClip.samplesPerSecond*timeDiff)/Spectra.spectraInterval]) {
+		List<Peak>[] peakLists = clip.getPeaks();
+		for (int i = 0; i < peakLists.length - AudioClip.samplesPerSecond*timeDiff/Spectra.spectraInterval; i++) {
+			for (Peak peak1 : peakLists[i]) {
+				for (Peak peak2 : peakLists[i+(AudioClip.samplesPerSecond*timeDiff/Spectra.spectraInterval)]) {
 					probes.put(
 							new Probe (peak1, peak2), 
 							new ProbeLocation(clip.getTrackId(),i*Spectra.spectraInterval)
 							);
 				}
 			}
+			//System.out.println("This means that it's run through all Peaks at a given point in time");
 		}
 		return probes;
 	}

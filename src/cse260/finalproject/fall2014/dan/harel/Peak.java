@@ -1,12 +1,14 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.io.Serializable;
+
 /**
  * Object representation of a spectral peak. Contains the time at which the
  * peak appears along with the value of the peak.
  * @author danharel
  *
  */
-public class Peak {
+public class Peak implements Serializable {
 
 	/** Time at which a peak appears */
 	private int time;

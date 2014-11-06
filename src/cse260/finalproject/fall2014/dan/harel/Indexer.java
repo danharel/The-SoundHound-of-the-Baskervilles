@@ -75,7 +75,8 @@ public class Indexer extends JFrame {
 		play.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				playSelectedSong();
+				//playSelectedSong();
+				System.out.println(":^)");
 			}
 		});
 		
@@ -155,8 +156,11 @@ public class Indexer extends JFrame {
 	 * @param clip
 	 */
 	public void addSong(AudioClip clip) {
+		System.out.println("Adding song to database AND list!");
 		database.addAudioClip(clip);
+		System.out.println("Adding song to database AND list!2");
 		songList.addSong(clip);
+		System.out.println("Adding song to database AND list!3");
 	}
 	
 	/**
@@ -174,24 +178,27 @@ public class Indexer extends JFrame {
 	 * @param clip
 	 */
 	public void deleteSong(AudioClip clip) {
-		database.removeAudioClip(clip);
-		songList.removeSong(clip);
+		deleteSong(clip.getIdentifier());
 	}
 	
 	/**
 	 * Plays the currently selected song
 	 */
-	public void playSelectedSong() {
+	/*public void playSelectedSong() {
 		List<AudioClip> selected = songList.getSelectedValuesList();
 		if (selected.size() > 1)
 			JOptionPane.showMessageDialog(songList, "Must select only one song!");
 		else
 			selected.get(0).play();
-	}
+	}*/
 	
 	public void removeSelectedSongs() {
-		List<AudioClip> selected = songList.getSelectedValuesList();
-		for (AudioClip clip : selected)
+		for (ClipIdentifier clip : songList.getSelectedValuesList())
 			deleteSong(clip);
+	}
+
+	private void deleteSong(ClipIdentifier clip) {
+		database.removeAudioClip(clip);
+		songList.removeSong(clip);
 	}
 }

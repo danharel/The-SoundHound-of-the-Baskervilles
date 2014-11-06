@@ -1,12 +1,14 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.io.Serializable;
+
 /**
  * Location of a Probe, represented by the ID of the song, as well as the time
  * at which it appears.
  * @author danharel
  *
  */
-public class ProbeLocation {
+public class ProbeLocation implements Serializable {
 
 	/** ID number of the song that a particular probe appears in */
 	private int songId;

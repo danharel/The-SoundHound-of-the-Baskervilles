@@ -1,11 +1,13 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.io.Serializable;
+
 /** Object representation of a probe. Contains the two frequencies as well as
  * the amount of time between them. 
  * @author danharel
  *
  */
-public class Probe {
+public class Probe implements Serializable {
 	
 	/** First frequency */
 	private double f1;
