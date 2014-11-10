@@ -25,12 +25,14 @@ public class Spectra {
 	private int number;
 	
 	/** Multiplier. Surrounding values must be less than this factor for a
-	 * value to be considered a peak;
+	 * value to be considered a peak; Lower differential results in more peaks
 	 */
-	private final double differential = .5;
+	private final double differential = .20;
 
 	/** Samples represented by the Spectra */
 	private double[] samples;
+	
+	private double[] previousPowerArray = null;
 	
 	/**
 	 * 
@@ -72,6 +74,8 @@ public class Spectra {
 		for (int i = 0; i < dft.length/2; i++) {
 			powerArray[i] = dft[i*2]*dft[i*2] + dft[i*2+1]*dft[i*2+1];
 		}
+		
+		previousPowerArray = powerArray;
 		return Arrays.copyOf(powerArray, powerArray.length/2);
 		//return powerArray;
 	}
@@ -83,12 +87,29 @@ public class Spectra {
 	 */
 	public List<Peak> getPeaks() {
 		List<Peak> peaks = new ArrayList<Peak>();
+		
 		double[] power = getPowerArray();
+
+		double maxVal = Double.MIN_VALUE;
+		for(double val : power) {
+			if (val > maxVal)
+				maxVal = val;
+		}
+		
+		// A value must be within localSize samples for it to be a "local" minima  
+		int localSize = 10;
+		
 		for (int i = 1; i < power.length-1; i++) {
+			if (power[i] - power[i-1] > maxVal*differential &&
+				power[i] - power[i+1] > maxVal*differential)
+				peaks.add(new Peak(number*Spectra.spectraInterval,i));
+		}
+		/*for (int i = 1; i < power.length-1; i++) {
 			if (power[i]*differential > power[i-1] &&
 				power[i]*differential > power[i+1])
-			peaks.add(new Peak(number*samples.length+i,i));
-		}
+			//peaks.add(new Peak(number*samples.length+i,i));
+			peaks.add(new Peak(number*Spectra.spectraInterval,i));
+		}*/
 		//System.out.println(peaks.size());
 		return peaks;
 	}

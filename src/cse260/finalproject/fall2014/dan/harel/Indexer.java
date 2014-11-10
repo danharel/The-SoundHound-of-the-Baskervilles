@@ -156,11 +156,11 @@ public class Indexer extends JFrame {
 	 * @param clip
 	 */
 	public void addSong(AudioClip clip) {
-		System.out.println("Adding song to database AND list!");
+		System.out.println("Adding song to visual list!");
 		database.addAudioClip(clip);
-		System.out.println("Adding song to database AND list!2");
+		System.out.println("Adding song to database!");
 		songList.addSong(clip);
-		System.out.println("Adding song to database AND list!3");
+		System.out.println("Done adding the song!");
 	}
 	
 	/**

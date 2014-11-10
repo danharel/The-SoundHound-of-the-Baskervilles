@@ -9,11 +9,16 @@ import java.io.Serializable;
  */
 public class Probe implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7169693880595399633L;
+
 	/** First frequency */
-	private double f1;
+	private int f1;
 	
 	/** Second frequency */
-	private double f2;
+	private int f2;
 	
 	/** Time dfference between frequencies */ 
 	private int time;
@@ -27,7 +32,7 @@ public class Probe implements Serializable {
 	 * @param time
 	 * 		Difference in time between the two frequencies
 	 */
-	public Probe(double f1, double f2, int time) {
+	public Probe(int f1, int f2, int time) {
 		this.f1 = f1;
 		this.f2 = f2;
 		this.time = time;
@@ -35,5 +40,9 @@ public class Probe implements Serializable {
 	
 	public Probe(Peak p1, Peak p2) {
 		this(p1.getFrequency(), p2.getFrequency(), p2.getTime()-p1.getTime());
+	}
+	
+	public String toString() {
+		return String.format("Frequency1: %d\tFrequency2: %d\tTime: %d", f1, f2, time);
 	}
 }

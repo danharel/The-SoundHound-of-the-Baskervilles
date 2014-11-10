@@ -1,5 +1,6 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -9,7 +10,7 @@ import java.util.Map;
 public class Extractor {
 	
 	/** Difference in time required for two peaks to get paired into a Probe */
-	private static int timeDiff = 1;
+	private static int timeDiff = 2;
 	
 	public static List<Peak>[] getPeaks(AudioClip clip) {
 		double[] samples = clip.getSamples();
@@ -41,17 +42,19 @@ public class Extractor {
 		return probes;
 	}
 	
-	public static Map<Probe, ProbeLocation> getProbesAndLocation(AudioClip clip) {
+	public static List<AbstractMap.SimpleEntry<Probe, ProbeLocation>> getProbesAndLocations(AudioClip clip) {
 		
-		Map<Probe, ProbeLocation> probes = new HashMap<Probe, ProbeLocation>();
+		List<AbstractMap.SimpleEntry<Probe, ProbeLocation>> probes = new ArrayList<AbstractMap.SimpleEntry<Probe, ProbeLocation>>();
 		
 		List<Peak>[] peakLists = clip.getPeaks();
 		for (int i = 0; i < peakLists.length - AudioClip.samplesPerSecond*timeDiff/Spectra.spectraInterval; i++) {
 			for (Peak peak1 : peakLists[i]) {
 				for (Peak peak2 : peakLists[i+(AudioClip.samplesPerSecond*timeDiff/Spectra.spectraInterval)]) {
-					probes.put(
-							new Probe (peak1, peak2), 
-							new ProbeLocation(clip.getTrackId(),i*Spectra.spectraInterval)
+					probes.add(
+							new AbstractMap.SimpleEntry<Probe, ProbeLocation>(
+									new Probe (peak1, peak2), 
+									new ProbeLocation(clip.getTrackId(),i*Spectra.spectraInterval)
+									)
 							);
 				}
 			}

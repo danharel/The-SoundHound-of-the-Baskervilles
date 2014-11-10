@@ -1,0 +1,14 @@
+################
+#IMPLEMENTATION#
+################
+
+Calculating and indexing probes
+Calculating and displaying peaks
+Properly sized spectrogram (remove that stupid j/15)
+Undo the if (false) statement in SontDatabase:110
+
+######
+#BUGS#
+######
+
+Cannot load long files. Runs out of memory? Has to do with the garbage collecter and the HashMaps

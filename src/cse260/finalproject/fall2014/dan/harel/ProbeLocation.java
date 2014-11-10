@@ -10,6 +10,11 @@ import java.io.Serializable;
  */
 public class ProbeLocation implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6682670273805108759L;
+
 	/** ID number of the song that a particular probe appears in */
 	private int songId;
 	
@@ -66,5 +71,9 @@ public class ProbeLocation implements Serializable {
 	 */
 	public static int getDelta(ProbeLocation p1, ProbeLocation p2) {
 		return Math.abs(p1.getTime() - p2.getTime());
+	}
+	
+	public String toString() {
+		return String.format("Song ID: %d\tTime: %d", songId, time);
 	}
  }

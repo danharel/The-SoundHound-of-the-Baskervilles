@@ -31,6 +31,7 @@ public class SpectrogramPanel extends DisplayPanel {
 		
 		g.setColor(Color.BLACK);
 		g.fillRect(0,0,getWidth(), getHeight());
+		//System.out.printf("Width: %d, Height: %d\n", getWidth(), getHeight());
 
 		//Calculate the number of samples per pixel.
 		long length = clip.getSamples().length;
@@ -76,9 +77,12 @@ public class SpectrogramPanel extends DisplayPanel {
 
 				//Draw the color
 				//Divide j by 15 to fit it in the screen. Figure this out later
-				if (/* 2*j*(samplesPerSpectra/samplesPerPixel*2)/getHeight() */ j > currHeight) {
-					currHeight = j;
-					//currHeight = (int)(2*j*(samplesPerSpectra/samplesPerPixel)/getHeight());
+				
+				//double newHeight = j/15;
+				double newHeight = getHeight(j);
+				if ( newHeight > currHeight) {
+					//currHeight = j/15;
+					currHeight = (int)newHeight;
 					currMax = Double.MIN_VALUE;
 				}
 
@@ -98,18 +102,27 @@ public class SpectrogramPanel extends DisplayPanel {
 		
 		g.setColor(Color.YELLOW);
 		for (List<Peak> peaks : clip.getPeaks()) {
+			//This algo doesn't work
+			//System.out.println(peaks.size());
 			for (Peak peak : peaks) {
 				int x = (int)((peak.getTime()-samplesPerSpectra/4)/samplesPerPixel);
-				//int y = (int)(getHeight()*peak.getFrequency()/samplesPerSpectra);
-				int y = (int)(peak.getFrequency()/1);
+				//int y = (int)(2*getHeight()*peak.getFrequency()/samplesPerSpectra);
+				//int y = (int)(2*peak.getFrequency()*(samplesPerSpectra/samplesPerPixel)/getHeight());
+				int y = (int)getHeight(peak.getFrequency());
+				//int y = (int)(peak.getFrequency()/15);
 				int width = (int)(samplesPerSpectra/samplesPerPixel);
 				int height = 1;
-				//g.fillRect(x,y,width,height);
+				g.fillRect(x,y,width,height);
 				revalidate();
 				//System.out.printf("x: %d\ny: %d\n\n", peak.getTime(), (int) (5*getHeight()*peak.getFrequency()/samplesPerSpectra));
 			}
 		}
 		//g.fillRect(100,100,100,100);
 
+	}
+	
+	private double getHeight(double freq) {
+		return 4*freq*(1.0*getHeight()/samplesPerSpectra);
+		//return freq/15;
 	}
 }

@@ -14,7 +14,7 @@ public class Peak implements Serializable {
 	private int time;
 	
 	/** Frequency of the peak */
-	private double frequency;
+	private int frequency;
 	
 	/**
 	 * 
@@ -23,7 +23,7 @@ public class Peak implements Serializable {
 	 * @param value
 	 * 		Frequency represented by the Peak
 	 */
-	public Peak(int time, double frequency) {
+	public Peak(int time, int frequency) {
 		this.time = time;
 		this.frequency = frequency;
 	}
@@ -42,7 +42,7 @@ public class Peak implements Serializable {
 	 * @return
 	 * 		The frequency represented by the Peak;
 	 */
-	public double getFrequency() {
+	public int getFrequency() {
 		return frequency;
 	}
 	

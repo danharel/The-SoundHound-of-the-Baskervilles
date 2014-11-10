@@ -9,6 +9,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.util.AbstractMap;
+import java.util.List;
+import java.util.Set;
 
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -16,6 +19,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
@@ -50,16 +54,17 @@ public class Identifier extends JFrame {
 		
 		database = SongDatabase.getSongDatabase();
 		
-		getContentPane().setLayout(new GridLayout(2,1));
+		//getContentPane().setLayout(new GridLayout(2,1));
+		getContentPane().setLayout(new BorderLayout());
 		
 		JMenuBar mb = new JMenuBar();
 		setJMenuBar(mb);
 		
-		JMenu m = new JMenu("File");
-		mb.add(m);
+		JMenu file = new JMenu("File");
+		mb.add(file);
 		
 		JMenuItem openFile = new JMenuItem("Load File");
-		m.add(openFile);
+		file.add(openFile);
 		openFile.addActionListener (new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -68,11 +73,32 @@ public class Identifier extends JFrame {
 		});
 		
 		JMenuItem play = new JMenuItem("Play Song");
-		m.add(play);
+		file.add(play);
 		play.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				playSong();
+			}
+		});
+		
+		JMenu view = new JMenu("View");
+		mb.add(view);
+		
+		JMenuItem zoomIn = new JMenuItem("Zoom In");
+		view.add(zoomIn);
+		zoomIn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoomIn();
+			}
+		});
+		
+		JMenuItem zoomOut = new JMenuItem("Zoom Out");
+		view.add(zoomOut);
+		zoomOut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				zoomOut();
 			}
 		});
 
@@ -92,14 +118,25 @@ public class Identifier extends JFrame {
 	    		System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
 	    		File file = chooser.getSelectedFile();
 	    		clip = new AudioClip(file);
+
+	    		getContentPane().removeAll();
+	    		
+	    		JPanel content = new JPanel(new GridLayout(2,1));
+	    		getContentPane().add(content);
 	    		
 	    	    waveform = new WaveformPanel(clip);
-	    	    add(new JScrollPane(waveform));
-	    	    waveform.setVisible(true);
+	    	    JScrollPane scroll1 = new JScrollPane(waveform);
+	    	    content.add(scroll1);
+	    	    //waveform.setVisible(true);
 	    	    
 	    	    spectrogram = new SpectrogramPanel(clip);
-	    	    add(new JScrollPane(spectrogram));
-	    	    spectrogram.setVisible(true);
+	    	    JScrollPane scroll2 = new JScrollPane(spectrogram);
+	    	    content.add(scroll2);
+	    	    
+	    	    scroll1.getHorizontalScrollBar().setModel(scroll2.getHorizontalScrollBar().getModel());
+	    	    
+	    	    findMatch(clip);
+	    	    
 	    	    pack();
 	    	    revalidate();
 	    	}
@@ -126,7 +163,6 @@ public class Identifier extends JFrame {
 	 * application.
 	 */
 	private void playSongInBackground() {
-		
 	}
 	
 	/**
@@ -136,7 +172,42 @@ public class Identifier extends JFrame {
 	 * 		Clip to match.
 	 */
 	private void findMatch(AudioClip clip) {
+		//List is empty when it gets here, but not when it adds the song...
+		database.printProbeLocations();
+		//database.printPorbes();
 		
+		List<AbstractMap.SimpleEntry<Probe, ProbeLocation>> probes = Extractor.getProbesAndLocations(clip);
+		for (AbstractMap.SimpleEntry<Probe, ProbeLocation> probe : probes ) {
+			Set<ProbeLocation> locations = database.getMatches(probe.getKey());
+			if (locations != null) {
+				System.out.println("Probe matched");
+				for (ProbeLocation location : locations) {
+					int delta = ProbeLocation.getDelta(probe.getValue(), location);
+				}
+			}
+			else {
+				//System.out.println("Probe not matched...");
+			}
+			//Britney145-10 hash code = 1097783044? 1716617782?
+		}
+	}
+	
+	private void zoomIn() {
+		if (waveform != null && spectrogram != null) {
+			waveform.zoomIn();
+			spectrogram.zoomIn();
+		}	
+		else
+			JOptionPane.showMessageDialog(waveform, "Must load a song first!");
+	}
+	
+	private void zoomOut() {
+		if (waveform != null && spectrogram != null) {
+			waveform.zoomOut();
+			spectrogram.zoomOut();
+		}	
+		else
+			JOptionPane.showMessageDialog(waveform, "Must load a song first!");
 	}
 
 }

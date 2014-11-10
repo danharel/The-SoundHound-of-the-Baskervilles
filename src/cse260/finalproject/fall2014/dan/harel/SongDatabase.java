@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.AbstractMap;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -99,25 +101,24 @@ public class SongDatabase implements Serializable {
 	 * 		Clip to add
 	 */
 	public void addAudioClip(AudioClip clip) {
-		System.out.println("getting probes and locations!");
-		Map<Probe,ProbeLocation> probesAndLocs = Extractor.getProbesAndLocation(clip);
-		System.out.println("Successfully obtained probes and locations!");
-		List<Probe> probes = new ArrayList<Probe>();
-		System.out.println("Successfully obtained probes and locations!2");
-		probes.addAll(probesAndLocs.keySet());
-		System.out.println("Probes: " + probes.size());
-		System.out.println("Successfully obtained probes and locations!3");
+		List<AbstractMap.SimpleEntry<Probe, ProbeLocation>> probesAndLocs = Extractor.getProbesAndLocations(clip);
+		System.out.println("Number of Probes: " + probesAndLocs.size());
 		
-		// too much processing here. Find a way to cut down the runtime.
-		clipsIndexed.put(clip.getIdentifier(), probes);
-		System.out.println(probesAndLocs.keySet().size());
-		for (Probe probe : probesAndLocs.keySet()) {
-			//System.out.println(probeLocations.get(probe));
-			if (!probeLocations.containsKey(probe))
-				probeLocations.put(probe, new HashSet<ProbeLocation>());
-			probeLocations.get(probe).add(probesAndLocs.get(probe));
+		List<Probe> probes = new ArrayList<Probe>();
+		
+		for (AbstractMap.SimpleEntry<Probe, ProbeLocation> probe : probesAndLocs ) {
+			probes.add(probe.getKey());
+			if (!probeLocations.containsKey(probe.getKey())) {
+				probeLocations.put(probe.getKey(),  new HashSet<ProbeLocation>());
+			}
+			probeLocations.get(probe.getKey()).add(probe.getValue());
+			//System.out.println(probeLocations.get(probe.getKey()));
 		}
-		System.out.println("Successfully obtained probes and locations!5");
+		System.out.println("Probes: " + probes.size());
+		printProbeLocations();
+		printPorbes();
+
+		clipsIndexed.put(clip.getIdentifier(), probes);
 		
 	}
 	
@@ -217,6 +218,19 @@ public class SongDatabase implements Serializable {
 		}
 		finally {
 			//database.saveDatabase();
+		}
+	}
+	
+	public void printProbeLocations() {
+		for (Set<ProbeLocation> locations : probeLocations.values()) {
+			for (ProbeLocation location : locations)
+				System.out.println(location);
+		}
+	}
+	
+	public void printPorbes() {
+		for (Probe probe : probeLocations.keySet()) {
+			System.out.println(probe);
 		}
 	}
 }

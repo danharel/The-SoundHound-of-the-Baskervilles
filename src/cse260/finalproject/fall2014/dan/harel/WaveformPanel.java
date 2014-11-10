@@ -42,26 +42,15 @@ public class WaveformPanel extends DisplayPanel {
 	 */
 	@Override
 	public void paintComponent(Graphics g) {
-		/*
-		super.paintComponent(g);
-		yAxis = getHeight()/2;
-		double max = clip.getMaxAmplitude();
-		int x = 0;
-		for (double sample : clip.getSamples()) {
-			//System.out.println((int)(yAxis*(1-sample/max)));
-			g.drawLine(0, (int)(yAxis*(1-sample/max)), x, (int)(yAxis*(1-sample/max)));
-			revalidate();
-			x++;
-		}*/
 		
-		//STARK'S CODE. REMOVE LATER
+		//STARK'S CODE. CREDIT GOES TO PROFESSOR STARK
 		super.paintComponent(g);
 		Color c = g.getColor();
 		g.setColor(Color.BLUE);
 		Dimension d = getSize();
 		long length = clip.getSamples().length;
 		double samplesPerPixel = length / d.getWidth();
-		double hzoom = samplesPerPixel;
+		hzoom = samplesPerPixel;
 		double amp = clip.getMaxAmplitude();
 		if(amp < 1E-6)
 			amp = 1E-6;
@@ -76,7 +65,7 @@ public class WaveformPanel extends DisplayPanel {
 		double i = startX * samplesPerPixel;
 		for(int x = startX; x < endX; x++, i += samplesPerPixel) {
 			for(double j = 0.0; j < samplesPerPixel; j += 1.0) {
-				double v = clip.getSamples()[(int)(i+j)] / amp;
+				double v = clip.getSamples()[(int)((i+j)/2.0)] / amp;
 				int y = d.height - (int)((d.height * v + d.height)/2.0);
 				if(x > 0)
 					g.drawLine(px, py, x, y);
@@ -84,12 +73,8 @@ public class WaveformPanel extends DisplayPanel {
 				py = y;
 			}
 		}
+		g.setColor(c);
 			
 	}
-	
-	/*@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(1000,600);
-	}*/
 
 }

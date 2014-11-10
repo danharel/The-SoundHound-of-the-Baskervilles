@@ -109,6 +109,7 @@ public class AudioDemo extends JFrame {
 			}
 		});
 		JMenuItem playItem = new JMenuItem("Play");
+		m.add(playItem);
 		playItem.addActionListener
 		(new ActionListener() {
 			@Override
@@ -132,7 +133,6 @@ public class AudioDemo extends JFrame {
 				}
 			}
 		});
-		m.add(playItem);
 	}
 
 	/**
