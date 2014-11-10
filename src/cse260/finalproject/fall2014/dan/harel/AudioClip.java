@@ -48,7 +48,7 @@ public class AudioClip implements Serializable {
 	private List<Peak>[] peaks;
 	
 	/** Identifies the clip */
-	private ClipIdentifier identifier;
+	private ClipIdentification identifier;
 	
 	/**
 	 * Creates a new AudioClip using the given file path
@@ -119,7 +119,7 @@ public class AudioClip implements Serializable {
 		
 		peaks = Extractor.getPeaks(this);
 		
-		identifier = new ClipIdentifier(this);
+		identifier = new ClipIdentification(this);
 		
 	}
 	
@@ -152,7 +152,9 @@ public class AudioClip implements Serializable {
 	public int getTrackId() {
 		/*Will most likely just return the hash code. May be subject to change.
 		Depends on how well that works.*/
-		return hashCode();
+		//return hashCode();
+		
+		return name.hashCode() + samples.hashCode();
 	}
 	
 	/**
@@ -177,7 +179,7 @@ public class AudioClip implements Serializable {
 		return name;
 	}
 	
-	public ClipIdentifier getIdentifier() {
+	public ClipIdentification getIdentifier() {
 		return identifier;
 	}
 	

@@ -35,18 +35,18 @@ public class SongDatabase implements Serializable {
 	private HashMap<Probe, Set<ProbeLocation>> probeLocations;
 	
 	/** Map of an AudioClip to the Probes extracted */ 
-	private HashMap<ClipIdentifier, List<Probe>> clipsIndexed;
+	private HashMap<ClipIdentification, List<Probe>> clipsIndexed;
 	
 	/** File name in which the databases will be saved to and loaded from */
 	private static final String SAVE_PATH = "database.dat";
 	
 	private SongDatabase() {
 		probeLocations = new HashMap<Probe, Set<ProbeLocation>>();
-		clipsIndexed = new HashMap<ClipIdentifier, List<Probe>>();
+		clipsIndexed = new HashMap<ClipIdentification, List<Probe>>();
 	}
 	
 	public SongDatabase(HashMap<Probe, Set<ProbeLocation>> probeLocations,
-			HashMap<ClipIdentifier, List<Probe>> clipIndexes) {
+			HashMap<ClipIdentification, List<Probe>> clipIndexes) {
 		this.probeLocations = probeLocations;
 		this.clipsIndexed = clipIndexes;
 	}
@@ -69,7 +69,7 @@ public class SongDatabase implements Serializable {
 	 * @return
 	 * 		Set of all songs that have been indexed.
 	 */
-	public Set<ClipIdentifier> getSongsIndexed() {
+	public Set<ClipIdentification> getSongsIndexed() {
 		return clipsIndexed.keySet();
 	}
 	
@@ -115,8 +115,8 @@ public class SongDatabase implements Serializable {
 			//System.out.println(probeLocations.get(probe.getKey()));
 		}
 		System.out.println("Probes: " + probes.size());
-		printProbeLocations();
-		printPorbes();
+		//printProbeLocations();
+		//printPorbes();
 
 		clipsIndexed.put(clip.getIdentifier(), probes);
 		
@@ -131,7 +131,7 @@ public class SongDatabase implements Serializable {
 		removeAudioClip(clip.getIdentifier());
 	}
 	
-	public void removeAudioClip(ClipIdentifier clip) {
+	public void removeAudioClip(ClipIdentification clip) {
 		/* Don't forget to remove the corresponding probe locations from
 		 * probeLocations. That is, go trough the list of Probes for that
 		 * AudioClip, then remove all ProbeLocations with a songID that matches
@@ -193,7 +193,7 @@ public class SongDatabase implements Serializable {
 				System.out.println(file.getAbsolutePath());
 				ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
 				HashMap<Probe, Set<ProbeLocation>> probeLocations = (HashMap<Probe, Set<ProbeLocation>>) in.readObject();
-				HashMap<ClipIdentifier, List<Probe>> clipsIndexed = (HashMap<ClipIdentifier, List<Probe>>) in.readObject();
+				HashMap<ClipIdentification, List<Probe>> clipsIndexed = (HashMap<ClipIdentification, List<Probe>>) in.readObject();
 				database = new SongDatabase(probeLocations, clipsIndexed);
 				in.close();
 			//}

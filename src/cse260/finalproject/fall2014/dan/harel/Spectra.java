@@ -27,7 +27,7 @@ public class Spectra {
 	/** Multiplier. Surrounding values must be less than this factor for a
 	 * value to be considered a peak; Lower differential results in more peaks
 	 */
-	private final double differential = .20;
+	private final double differential = .15;
 
 	/** Samples represented by the Spectra */
 	private double[] samples;

@@ -193,11 +193,11 @@ public class Indexer extends JFrame {
 	}*/
 	
 	public void removeSelectedSongs() {
-		for (ClipIdentifier clip : songList.getSelectedValuesList())
+		for (ClipIdentification clip : songList.getSelectedValuesList())
 			deleteSong(clip);
 	}
 
-	private void deleteSong(ClipIdentifier clip) {
+	private void deleteSong(ClipIdentification clip) {
 		database.removeAudioClip(clip);
 		songList.removeSong(clip);
 	}

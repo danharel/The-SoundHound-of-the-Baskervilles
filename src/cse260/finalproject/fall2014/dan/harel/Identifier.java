@@ -10,7 +10,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
 import java.util.AbstractMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JFileChooser;
@@ -172,17 +174,30 @@ public class Identifier extends JFrame {
 	 * 		Clip to match.
 	 */
 	private void findMatch(AudioClip clip) {
-		//List is empty when it gets here, but not when it adds the song...
-		database.printProbeLocations();
+		//database.printProbeLocations();
 		//database.printPorbes();
 		
+		Map<Match, Integer> matches = new HashMap<Match, Integer>();
 		List<AbstractMap.SimpleEntry<Probe, ProbeLocation>> probes = Extractor.getProbesAndLocations(clip);
+		
+		/* Go through each Probe-ProbeLocation pairing */
 		for (AbstractMap.SimpleEntry<Probe, ProbeLocation> probe : probes ) {
+			/* Get the Locations of all indexed probes that match this one */ 
 			Set<ProbeLocation> locations = database.getMatches(probe.getKey());
+			/* There's a chance that this Probe is totally new. Skip it if it is */
 			if (locations != null) {
-				System.out.println("Probe matched");
+				/* Check all of the locations found */
 				for (ProbeLocation location : locations) {
+					/* Find the difference in time between those two probes */
 					int delta = ProbeLocation.getDelta(probe.getValue(), location);
+					/* Create a pairing of this ClipIdentification to the delta value */
+					Match match = new Match(clip, delta);
+					/* Put that pairing into a map to count the number of occurances
+					 * of that particular pairing of ID and delta */
+					if (!matches.containsKey(match))
+						matches.put(match, 1);
+					else
+						matches.put(match, matches.get(match)+1);
 				}
 			}
 			else {
@@ -190,6 +205,8 @@ public class Identifier extends JFrame {
 			}
 			//Britney145-10 hash code = 1097783044? 1716617782?
 		}
+		for (Match match : matches.keySet())
+			System.out.println(match + "\t Occurances: " + matches.get(match));
 	}
 	
 	private void zoomIn() {

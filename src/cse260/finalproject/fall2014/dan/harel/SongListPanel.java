@@ -18,7 +18,7 @@ import javax.swing.ListCellRenderer;
  * @author danharel
  *
  */
-public class SongListPanel extends JList<ClipIdentifier> {
+public class SongListPanel extends JList<ClipIdentification> {
 
 	/**
 	 * 
@@ -27,15 +27,15 @@ public class SongListPanel extends JList<ClipIdentifier> {
 
 	private SongDatabase database;
 	
-	DefaultListModel<ClipIdentifier> songList;
+	DefaultListModel<ClipIdentification> songList;
 
 	public SongListPanel(SongDatabase database) {
 		super();
 		
 		this.database = database;
 		
-		songList = new DefaultListModel<ClipIdentifier>();
-		for (ClipIdentifier clip : database.getSongsIndexed())
+		songList = new DefaultListModel<ClipIdentification>();
+		for (ClipIdentification clip : database.getSongsIndexed())
 			songList.addElement(clip);
 		setModel(songList);
 	}
@@ -46,7 +46,7 @@ public class SongListPanel extends JList<ClipIdentifier> {
 		System.out.println("Song added to list!");
 	}
 	
-	public void removeSong(ClipIdentifier clip) {
+	public void removeSong(ClipIdentification clip) {
 		songList.removeElement(clip);
 	}
 }

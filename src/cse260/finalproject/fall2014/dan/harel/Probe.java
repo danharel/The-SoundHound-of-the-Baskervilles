@@ -45,4 +45,21 @@ public class Probe implements Serializable {
 	public String toString() {
 		return String.format("Frequency1: %d\tFrequency2: %d\tTime: %d", f1, f2, time);
 	}
+	
+	@Override
+	public int hashCode() {
+		return f1*500 + f2 + time;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Probe))
+			return false;
+		Probe p = (Probe)obj;
+		return (f1 == p.f1) && (f2 == p.f2) && (time == p.time); 
+	}
 }
