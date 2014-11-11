@@ -53,7 +53,7 @@ public class Extractor {
 					probes.add(
 							new AbstractMap.SimpleEntry<Probe, ProbeLocation>(
 									new Probe (peak1, peak2), 
-									new ProbeLocation(clip.getTrackId(),i*Spectra.spectraInterval)
+									new ProbeLocation(clip.getIdentifier(),i*Spectra.spectraInterval)
 									)
 							);
 				}

@@ -93,17 +93,7 @@ public class Indexer extends JFrame {
 		songList.setVisible(true);
 		
 		setSize(800,600);
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//pack();
-		
-		WindowListener exitListener = new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                database.saveDatabase();
-            	System.exit(0);
-            }
-        };
-        addWindowListener(exitListener);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		setVisible(true);
 	}

@@ -41,14 +41,19 @@ public class SongDatabase implements Serializable {
 	private static final String SAVE_PATH = "database.dat";
 	
 	private SongDatabase() {
-		probeLocations = new HashMap<Probe, Set<ProbeLocation>>();
-		clipsIndexed = new HashMap<ClipIdentification, List<Probe>>();
+		this(new HashMap<Probe, Set<ProbeLocation>>(), new HashMap<ClipIdentification, List<Probe>>());
 	}
 	
 	public SongDatabase(HashMap<Probe, Set<ProbeLocation>> probeLocations,
 			HashMap<ClipIdentification, List<Probe>> clipIndexes) {
 		this.probeLocations = probeLocations;
 		this.clipsIndexed = clipIndexes;
+		Runtime.getRuntime().addShutdownHook(new Thread() {
+			@Override
+			public void run() {
+				saveDatabase();
+			}
+		});
 	}
 
 	/**
@@ -155,7 +160,7 @@ public class SongDatabase implements Serializable {
 	public void removeProbeFromClip(Probe probe, AudioClip clip) {
 		//Implemented because I know I'll forget how to do it later.
 		for (ProbeLocation loc : probeLocations.get(probe))
-			if (loc.getId() == clip.getTrackId())
+			if (loc.getIdNumber() == clip.getTrackId())
 				probeLocations.remove(loc);
 	}
 	
@@ -167,7 +172,7 @@ public class SongDatabase implements Serializable {
 			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(SAVE_PATH));
 			out.writeObject(probeLocations);
 			out.writeObject(clipsIndexed);
-			database = new SongDatabase(probeLocations, clipsIndexed);
+			//database = new SongDatabase(probeLocations, clipsIndexed);
 			out.close();
 		}
 		catch(Exception e) {

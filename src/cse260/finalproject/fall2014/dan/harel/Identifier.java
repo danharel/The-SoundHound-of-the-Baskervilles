@@ -191,7 +191,7 @@ public class Identifier extends JFrame {
 					/* Find the difference in time between those two probes */
 					int delta = ProbeLocation.getDelta(probe.getValue(), location);
 					/* Create a pairing of this ClipIdentification to the delta value */
-					Match match = new Match(clip, delta);
+					Match match = new Match(location.getClipIdentification(), delta);
 					/* Put that pairing into a map to count the number of occurances
 					 * of that particular pairing of ID and delta */
 					if (!matches.containsKey(match))
@@ -205,8 +205,10 @@ public class Identifier extends JFrame {
 			}
 			//Britney145-10 hash code = 1097783044? 1716617782?
 		}
+		new MatchList(matches);
+		/*
 		for (Match match : matches.keySet())
-			System.out.println(match + "\t Occurances: " + matches.get(match));
+			System.out.println(match + "\t Occurances: " + matches.get(match));*/
 	}
 	
 	private void zoomIn() {

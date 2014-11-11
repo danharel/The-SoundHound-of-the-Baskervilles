@@ -16,7 +16,7 @@ public class ProbeLocation implements Serializable {
 	private static final long serialVersionUID = 6682670273805108759L;
 
 	/** ID number of the song that a particular probe appears in */
-	private int songId;
+	private ClipIdentification songId;
 	
 	/** Time at which the probe appears in the song */  
 	private int time;
@@ -28,7 +28,7 @@ public class ProbeLocation implements Serializable {
 	 * @param time
 	 * 		Rime at which the Probe appears
 	 */
-	public ProbeLocation(int songId, int time) {
+	public ProbeLocation(ClipIdentification songId, int time) {
 		this.songId = songId;
 		this.time = time;
 	}
@@ -41,7 +41,15 @@ public class ProbeLocation implements Serializable {
 	 * 		Time at which the Probe appears
 	 */
 	public ProbeLocation(AudioClip clip, int time) {
-		this(clip.getTrackId(), time);
+		this(clip.getIdentifier(), time);
+	}
+	
+	public String getName() {
+		return songId.getName();
+	}
+	
+	public ClipIdentification getClipIdentification() {
+		return songId;
 	}
 	
 	/**
@@ -49,8 +57,8 @@ public class ProbeLocation implements Serializable {
 	 * @return
 	 * 		Song ID associated with this ProbeLocation
 	 */
-	public int getId() {
-		return songId;
+	public int getIdNumber() {
+		return songId.getTrackId();
 	}
 	
 	/**
@@ -74,6 +82,6 @@ public class ProbeLocation implements Serializable {
 	}
 	
 	public String toString() {
-		return String.format("Song ID: %d\tTime: %d", songId, time);
+		return String.format("Song Name: %s\tTime: %d", songId.getName(), time);
 	}
  }
