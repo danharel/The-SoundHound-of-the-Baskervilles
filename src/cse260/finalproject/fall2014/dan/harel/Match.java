@@ -38,4 +38,12 @@ public class Match {
 		Match m = (Match) obj;
 		return (id.equals(m.id)) && (delta == m.delta);
 	}
+	
+	public ClipIdentification getIdentifier() {
+		return id;
+	}
+	
+	public int getDelta() {
+		return delta;
+	}
 }

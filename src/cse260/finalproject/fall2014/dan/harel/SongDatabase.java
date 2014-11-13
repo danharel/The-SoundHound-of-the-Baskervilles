@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -54,6 +55,7 @@ public class SongDatabase implements Serializable {
 				saveDatabase();
 			}
 		});
+		//printProbeLocations();
 	}
 
 	/**
@@ -85,7 +87,11 @@ public class SongDatabase implements Serializable {
 	 * 		The number of probes associated with the given AudioClip
 	 */
 	public int getNumProbesIndexed(AudioClip clip) {
-		return clipsIndexed.get(clip.getIdentifier()).size();
+		return getNumProbesIndexed(clip.getIdentifier());
+	}
+	
+	public int getNumProbesIndexed(ClipIdentification id) {
+		return clipsIndexed.get(id).size();
 	}
 	
 	/**
@@ -143,8 +149,25 @@ public class SongDatabase implements Serializable {
 		 * the AudioClip being removed
 		 */
 		List<Probe> probes = clipsIndexed.get(clip);
-		for (Probe probe : probes)
-			probeLocations.remove(probe);
+		for (Probe probe : probes) {
+			//probeLocations.remove(probe);
+			
+			//ConcurrentModificationException
+			/*for(ProbeLocation location: probeLocations.get(probe)) {
+				if (clip.getTrackId() == location.getIdNumber())
+					probeLocations.get(probe).remove(location);
+			}*/
+			
+			if (probeLocations.get(probe) == null)
+				continue;
+			System.out.println("Success");
+			Iterator<ProbeLocation> locationIter = probeLocations.get(probe).iterator();
+			while (locationIter.hasNext()) {
+				ProbeLocation location = locationIter.next();
+				if (clip.getTrackId() == location.getIdNumber())
+					locationIter.remove();
+			}
+		}
 		clipsIndexed.remove(clip);
 	}
 	
@@ -222,7 +245,6 @@ public class SongDatabase implements Serializable {
 			//e.printStackTrace();
 		}
 		finally {
-			//database.saveDatabase();
 		}
 	}
 	

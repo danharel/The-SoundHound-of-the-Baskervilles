@@ -58,7 +58,6 @@ public class Extractor {
 							);
 				}
 			}
-			//System.out.println("This means that it's run through all Peaks at a given point in time");
 		}
 		return probes;
 	}

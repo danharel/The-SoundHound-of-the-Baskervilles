@@ -66,7 +66,7 @@ public class SpectrogramPanel extends DisplayPanel {
 			int currHeight = 0;
 			double currMax = Double.MIN_NORMAL;
 
-			//jth sample in the power array
+			//jth frequency in the power array
 			for (int j = 0; j < powerArray.length; j++) {
 				//Calculate the grey-scale value of the color to draw
 				float colorVal = (float)((powerArray[j]-min)/(max-min));
@@ -76,12 +76,8 @@ public class SpectrogramPanel extends DisplayPanel {
 				g.setColor(color);
 
 				//Draw the color
-				//Divide j by 15 to fit it in the screen. Figure this out later
-				
-				//double newHeight = j/15;
 				double newHeight = getHeight(j);
 				if ( newHeight > currHeight) {
-					//currHeight = j/15;
 					currHeight = (int)newHeight;
 					currMax = Double.MIN_VALUE;
 				}
@@ -102,7 +98,6 @@ public class SpectrogramPanel extends DisplayPanel {
 		
 		g.setColor(Color.YELLOW);
 		for (List<Peak> peaks : clip.getPeaks()) {
-			//This algo doesn't work
 			//System.out.println(peaks.size());
 			for (Peak peak : peaks) {
 				int x = (int)((peak.getTime()-samplesPerSpectra/4)/samplesPerPixel);
@@ -117,12 +112,10 @@ public class SpectrogramPanel extends DisplayPanel {
 				//System.out.printf("x: %d\ny: %d\n\n", peak.getTime(), (int) (5*getHeight()*peak.getFrequency()/samplesPerSpectra));
 			}
 		}
-		//g.fillRect(100,100,100,100);
 
 	}
 	
 	private double getHeight(double freq) {
 		return 4*freq*(1.0*getHeight()/samplesPerSpectra);
-		//return freq/15;
 	}
 }

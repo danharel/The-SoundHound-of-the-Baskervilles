@@ -15,9 +15,13 @@ public class ClipIdentification implements Serializable {
 	/** ID number of the clip */
 	private int songId;
 	
+	/** Length in seconds of the AudioClip */
+	private int length;
+	
 	public ClipIdentification(AudioClip clip) {
 		name = clip.getName();
 		songId = clip.getTrackId();
+		length = (int)(clip.getSamples().length/clip.getSampleRate());
 	}
 	
 	public String getName() {
@@ -29,7 +33,12 @@ public class ClipIdentification implements Serializable {
 	}
 	
 	public String toString() {
-		return name;
+		String sec = ""+length%60;
+		if (sec.length()==1)
+			sec = "0"+sec;
+		else if (sec.length()==0)
+			sec = "00";
+		return String.format("<html>Name: %s<br>Length: %s:%s<br></html>", name, length/60, sec);
 	}
 	
 	@Override
@@ -47,6 +56,15 @@ public class ClipIdentification implements Serializable {
 			return false;
 		ClipIdentification ci = (ClipIdentification)obj;
 		return (name.equals(ci.name)) && (songId == ci.songId);
+	}
+
+	public String getTimeAsString() {
+		String sec = ""+length%60;
+		if (sec.length()==1)
+			sec = "0"+sec;
+		else if (sec.length()==0)
+			sec = "00";
+		return length/60+":"+sec;
 	}
 
 }

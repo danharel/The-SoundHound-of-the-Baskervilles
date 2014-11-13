@@ -1,5 +1,6 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -38,6 +39,7 @@ public class SongListPanel extends JList<ClipIdentification> {
 		for (ClipIdentification clip : database.getSongsIndexed())
 			songList.addElement(clip);
 		setModel(songList);
+		setCellRenderer(new Renderer());
 	}
 	
 	public void addSong(AudioClip clip) {
@@ -49,4 +51,37 @@ public class SongListPanel extends JList<ClipIdentification> {
 	public void removeSong(ClipIdentification clip) {
 		songList.removeElement(clip);
 	}
+	
+	class Renderer extends JLabel implements ListCellRenderer<Object> {
+
+	     // This is the only method defined by ListCellRenderer.
+	     // We just reconfigure the JLabel each time we're called.
+
+	     public Component getListCellRendererComponent(
+	       JList<?> list,           // the list
+	       Object value,            // value to display
+	       int index,               // cell index
+	       boolean isSelected,      // is the cell selected
+	       boolean cellHasFocus)    // does the cell have focus
+	     {
+	    	 setOpaque(true);
+	         
+	         if (isSelected) {
+	        	 setBackground(list.getSelectionBackground());
+	        	 setForeground(list.getSelectionForeground());
+	         } 
+	         else {
+	        	    setBackground(list.getBackground());
+	        	    setForeground(list.getForeground());
+	         }
+	         
+	         ClipIdentification clip = (ClipIdentification)value;
+	         
+	         setText(clip.getName());
+	         
+	         return this;
+	         
+	         
+	     }
+	 }
 }

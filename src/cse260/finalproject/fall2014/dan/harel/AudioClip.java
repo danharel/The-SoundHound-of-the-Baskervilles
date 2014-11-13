@@ -15,6 +15,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 /**
  * Object representation of an audio file of arbitrary length.
@@ -50,20 +51,25 @@ public class AudioClip implements Serializable {
 	/** Identifies the clip */
 	private ClipIdentification identifier;
 	
+	/** Samples per second. Should be same as samplesPerSecond, but isn't guaranteed. Hang on. I got this. */
+	private float sampleRate;
+	
 	/**
 	 * Creates a new AudioClip using the given file path
 	 * @param filePath
 	 * 		Path of the file to open
+	 * @throws UnsupportedAudioFileException 
 	 */
-	public AudioClip(String filePath) {
+	public AudioClip(String filePath) throws UnsupportedAudioFileException {
 		this(new File(filePath));
 	}
 	
 	/**
 	 * Creates a new AudioClip using its File object
 	 * @param file
+	 * @throws UnsupportedAudioFileException 
 	 */
-	public AudioClip(File file) {
+	public AudioClip(File file) throws UnsupportedAudioFileException {
 		name = file.getName();
 		this.file = file;
 		path = file.getAbsolutePath();
@@ -110,11 +116,12 @@ public class AudioClip implements Serializable {
 				}
 				v /= channels;
 				samples[i] = v;
-				//System.out.println(v);
 			}
+			sampleRate = format.getSampleRate();
 		}
 		catch (Exception e) {
-			e.printStackTrace();
+			//e.printStackTrace();
+			throw new UnsupportedAudioFileException();
 		}
 		
 		peaks = Extractor.getPeaks(this);
@@ -215,6 +222,10 @@ public class AudioClip implements Serializable {
 				max = d;
 		}
 		return max;
+	}
+	
+	public float getSampleRate() {
+		return sampleRate;
 	}
 
 }

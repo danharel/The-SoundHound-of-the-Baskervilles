@@ -180,12 +180,14 @@ public class Identifier extends JFrame {
 		Map<Match, Integer> matches = new HashMap<Match, Integer>();
 		List<AbstractMap.SimpleEntry<Probe, ProbeLocation>> probes = Extractor.getProbesAndLocations(clip);
 		
+		//database.printProbeLocations();
 		/* Go through each Probe-ProbeLocation pairing */
 		for (AbstractMap.SimpleEntry<Probe, ProbeLocation> probe : probes ) {
 			/* Get the Locations of all indexed probes that match this one */ 
 			Set<ProbeLocation> locations = database.getMatches(probe.getKey());
 			/* There's a chance that this Probe is totally new. Skip it if it is */
 			if (locations != null) {
+				System.out.println("Probe matched!");
 				/* Check all of the locations found */
 				for (ProbeLocation location : locations) {
 					/* Find the difference in time between those two probes */
@@ -201,11 +203,9 @@ public class Identifier extends JFrame {
 				}
 			}
 			else {
-				//System.out.println("Probe not matched...");
 			}
-			//Britney145-10 hash code = 1097783044? 1716617782?
 		}
-		new MatchList(matches);
+		new MatchInfo(matches);
 		/*
 		for (Match match : matches.keySet())
 			System.out.println(match + "\t Occurances: " + matches.get(match));*/

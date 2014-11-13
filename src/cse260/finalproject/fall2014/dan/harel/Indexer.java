@@ -3,6 +3,7 @@ package cse260.finalproject.fall2014.dan.harel;
 import java.awt.BorderLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -31,9 +33,11 @@ public class Indexer extends JFrame {
 	/** Database that stores songs */
 	private final SongDatabase database;
 	
-	private WaveformPanel waveform;
-	
+	/** JList that lists the songs indexed */
 	private SongListPanel songList;
+	
+	/** JPanel that displays information on a single selected song */
+	private SongInfoPanel songInfo;
 	
 	/**
 	 * Creates a new JFrame for the Indexer application
@@ -43,8 +47,10 @@ public class Indexer extends JFrame {
 		
 		database = SongDatabase.getSongDatabase();
 		songList = new SongListPanel(database);
+		songInfo = new SongInfoPanel(songList);
 		
-		getContentPane().setLayout(new BorderLayout());
+		//getContentPane().setLayout(new BorderLayout());
+		getContentPane().setLayout(new GridLayout(2,1));
 		
 		JMenuBar mb = new JMenuBar();
 		setJMenuBar(mb);
@@ -91,6 +97,8 @@ public class Indexer extends JFrame {
 
 		add(new JScrollPane(songList));
 		songList.setVisible(true);
+		
+		add(songInfo);
 		
 		setSize(800,600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -159,8 +167,15 @@ public class Indexer extends JFrame {
 	 */
 	private void addSong(File file) {
 		System.out.printf("Adding file: %s\n", file.getName());
-		addSong(new AudioClip(file));
-		songList.repaint();
+		try {
+			addSong(new AudioClip(file));
+		}
+		catch (UnsupportedAudioFileException e) {
+			System.out.printf("File %s is not a supported audio file\n", file.getName());
+		}
+		finally {
+			songList.repaint();
+		}
 	}
 	
 	/**
