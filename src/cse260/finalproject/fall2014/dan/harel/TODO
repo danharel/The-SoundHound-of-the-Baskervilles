@@ -2,13 +2,17 @@
 #IMPLEMENTATION#
 ################
 
-Calculating and indexing probes
-Calculating and displaying peaks
-Properly sized spectrogram (remove that stupid j/15)
-Undo the if (false) statement in SontDatabase:110
+Play the segment of a clip that's matched to.
+	Store the file location
+	Create an AudioClip
+	skip the first delta samples
+	Note: This won't work if I'm transferring the database w/o the audio files...
+Histogram
+Change MatchListPanel to a JTable 
 
 ######
 #BUGS#
 ######
 
-Cannot load long files. Runs out of memory? Has to do with the garbage collecter and the HashMaps
+Displaying long files
+Zooming in and out of a DisplayPanel

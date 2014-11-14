@@ -139,6 +139,8 @@ public class Identifier extends JFrame {
 	    	    
 	    	    findMatch(clip);
 	    	    
+	    	    setTitle(clip.getName());
+	    	    
 	    	    pack();
 	    	    revalidate();
 	    	}

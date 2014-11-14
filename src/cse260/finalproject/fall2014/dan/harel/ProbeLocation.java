@@ -31,6 +31,7 @@ public class ProbeLocation implements Serializable {
 	public ProbeLocation(ClipIdentification songId, int time) {
 		this.songId = songId;
 		this.time = time;
+		//this.time = time/AudioClip.samplesPerSecond;
 	}
 	
 	/**

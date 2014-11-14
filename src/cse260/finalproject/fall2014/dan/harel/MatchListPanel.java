@@ -38,7 +38,7 @@ public class MatchListPanel extends JList<Match> {
 			else
 				high = mid;
 		}
-		System.out.println("Match: " + match);
+		//System.out.println("Match: " + match);
 		list.add(low, match);
 			
 	}
@@ -65,6 +65,7 @@ public class MatchListPanel extends JList<Match> {
 	     
 	     public String getTimeAsString(int delta) {
 	    	 int seconds = delta/AudioClip.samplesPerSecond;
+	    	 //int seconds = delta;
 	    	 String sec = ""+seconds%60;if (sec.length()==1)
 	    		 sec = "0"+sec;
 	    	 else if (sec.length()==0)
