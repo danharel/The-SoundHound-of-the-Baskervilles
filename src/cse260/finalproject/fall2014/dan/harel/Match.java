@@ -46,4 +46,8 @@ public class Match {
 	public int getDelta() {
 		return delta;
 	}
+	
+	public String getName() {
+		return id.getName();
+	}
 }

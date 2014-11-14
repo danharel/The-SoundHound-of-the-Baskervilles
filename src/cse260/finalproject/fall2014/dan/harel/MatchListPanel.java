@@ -20,7 +20,7 @@ public class MatchListPanel extends JList<Match> {
 		this.matchInfo = matchInfo;
 		
 		list = new DefaultListModel<Match>();
-		for (Match match : this.matchInfo.matches.keySet())
+		for (Match match : this.matchInfo.getMatches().keySet())
 			addElementToList(match);
 		setModel(list);
 		
@@ -28,12 +28,12 @@ public class MatchListPanel extends JList<Match> {
 	}
 	
 	private void addElementToList(Match match) {
-		int val = this.matchInfo.matches.get(match);
+		int val = this.matchInfo.getMatches().get(match);
 		int low = 0;
 		int high = list.size();
 		while (low < high) {
 			int mid = (low+high)/2;
-			if (val < this.matchInfo.matches.get(list.get(mid)))
+			if (val < this.matchInfo.getMatches().get(list.get(mid)))
 				low = mid+1;
 			else
 				high = mid;
@@ -56,7 +56,7 @@ public class MatchListPanel extends JList<Match> {
 	       boolean cellHasFocus)    // does the cell have focus
 	     {
 	         String s = value.toString();
-	         s+= "\tMatches: " + MatchListPanel.this.matchInfo.matches.get((Match)value)
+	         s+= "\tMatches: " + MatchListPanel.this.matchInfo.getMatches().get((Match)value)
 	        		 + "\tOffset: " + getTimeAsString(((Match)value).getDelta());
 	         
 	         setText(s);
