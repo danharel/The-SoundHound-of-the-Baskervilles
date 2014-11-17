@@ -42,9 +42,6 @@ public class Identifier extends JFrame {
 	
 	/** Database of songs and probes for comparisons */
 	private SongDatabase database;
-	
-	/** KIll me */
-	private SongListPanel songList;
 
 	/**
 	 * Creates new Identifier object

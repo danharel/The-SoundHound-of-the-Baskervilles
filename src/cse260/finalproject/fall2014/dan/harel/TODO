@@ -8,7 +8,6 @@ Play the segment of a clip that's matched to.
 	skip the first delta samples
 	Note: This won't work if I'm transferring the database w/o the audio files, and storing the AudioFile would be way too much data to store.
 Histogram
-Rewrite MatchListPanel to sort the values in decreasing order of # of matches
 
 ######
 #BUGS#
