@@ -186,7 +186,6 @@ public class Identifier extends JFrame {
 			Set<ProbeLocation> locations = database.getMatches(probe.getKey());
 			/* There's a chance that this Probe is totally new. Skip it if it is */
 			if (locations != null) {
-				System.out.println("Probe matched!");
 				/* Check all of the locations found */
 				for (ProbeLocation location : locations) {
 					/* Find the difference in time between those two probes */
