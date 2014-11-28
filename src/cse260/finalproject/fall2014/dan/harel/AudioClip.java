@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -73,14 +77,20 @@ public class AudioClip implements Serializable {
 		name = file.getName();
 		this.file = file;
 		path = file.getAbsolutePath();
+		System.out.println("absPath: " + path);
+		System.out.println("getPath: " + file.getPath());
+		try {
+			System.out.println("canonicalPath: " + file.getCanonicalPath());
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		try {
 			AudioInputStream in = AudioSystem.getAudioInputStream(file);
 			AudioFormat format = in.getFormat();
 			
-			//WRITTEN BY PROFESSOR STARK. REMOVE LATER
-			// Verify that the input stream has the format we need.
-			// Right now this is 16-bit signed PCM format.
+			//WRITTEN BY PROFESSOR STARK
 			if(format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED)
 				throw new IllegalArgumentException("Signed PCM format required.");
 			int channels = format.getChannels();

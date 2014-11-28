@@ -12,7 +12,7 @@ public class MatchTablePanel extends JTable {
 	
 	private final String[] header = {"Song Name", "Delta", "Matches", "Offset"};
 
-	public MatchTablePanel(MatchInfo matchInfo) {
+	public MatchTablePanel(MatchInfoFrame matchInfo) {
 		Set<Match> matches = matchInfo.getMatches().keySet();
 		Object[][] values = new Object[matches.size()][header.length];
 		

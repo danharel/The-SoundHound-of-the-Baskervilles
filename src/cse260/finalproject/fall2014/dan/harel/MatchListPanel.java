@@ -12,10 +12,10 @@ public class MatchListPanel extends JList<Match> {
 	/**
 	 * 
 	 */
-	private final MatchInfo matchInfo;
+	private final MatchInfoFrame matchInfo;
 	private DefaultListModel list;
 
-	public MatchListPanel(MatchInfo matchInfo) {
+	public MatchListPanel(MatchInfoFrame matchInfo) {
 		super();
 		this.matchInfo = matchInfo;
 		

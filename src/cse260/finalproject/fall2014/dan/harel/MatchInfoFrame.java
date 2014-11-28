@@ -9,7 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
-public class MatchInfo extends JFrame {
+public class MatchInfoFrame extends JFrame {
 	
 	/** Header for the JTable */
 	private final String[] header = {"Song Name", "Delta", "Matches", "Offset"};
@@ -19,7 +19,7 @@ public class MatchInfo extends JFrame {
 	
 	private ArrayList<Match> sortedMatches;
 	
-	public MatchInfo(Map<Match, Integer> matches) {
+	public MatchInfoFrame(Map<Match, Integer> matches) {
 		super("Matches");
 		
 		this.matches = matches;
@@ -41,7 +41,6 @@ public class MatchInfo extends JFrame {
 			i++;
 		}
 		
-		//add(new JScrollPane(new MatchTablePanel(this)));
 		add(new JScrollPane(new JTable(values, header)));
 		setSize(800, 600);
 		

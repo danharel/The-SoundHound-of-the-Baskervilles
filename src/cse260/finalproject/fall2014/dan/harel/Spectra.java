@@ -2,6 +2,7 @@ package cse260.finalproject.fall2014.dan.harel;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 import edu.emory.mathcs.jtransforms.fft.DoubleFFT_1D;
@@ -31,8 +32,6 @@ public class Spectra {
 
 	/** Samples represented by the Spectra */
 	private double[] samples;
-	
-	private double[] previousPowerArray = null;
 	
 	/**
 	 * 
@@ -75,7 +74,6 @@ public class Spectra {
 			powerArray[i] = dft[i*2]*dft[i*2] + dft[i*2+1]*dft[i*2+1];
 		}
 		
-		previousPowerArray = powerArray;
 		return Arrays.copyOf(powerArray, powerArray.length/2);
 		//return powerArray;
 	}
@@ -96,9 +94,6 @@ public class Spectra {
 				maxVal = val;
 		}
 		
-		// A value must be within localSize samples for it to be a "local" minima  
-		int localSize = 10;
-		
 		for (int i = 1; i < power.length-1; i++) {
 			if (power[i] - power[i-1] > maxVal*differential &&
 				power[i] - power[i+1] > maxVal*differential)
@@ -112,6 +107,47 @@ public class Spectra {
 		}*/
 		//System.out.println(peaks.size());
 		return peaks;
+	}
+	
+	class SpectraPeakIterator implements Iterator<Peak> {
+		
+		private int index;
+		private final double[] power = getPowerArray();
+		private Peak next;
+		
+		public SpectraPeakIterator() {
+			setNext();
+		}
+
+		@Override
+		public boolean hasNext() {
+			return next != null;
+		}
+
+		@Override
+		public Peak next() {
+			Peak returnVal = next;
+			setNext();
+			return returnVal;
+		}
+
+		@Override
+		public void remove() {
+			
+		}
+		
+		private void setNext() {
+			next = null;
+			while (index < power.length - 1) {
+				if (power[index]*differential > power[index-1] &&
+						power[index]*differential > power[index+1]) {
+						next = new Peak(number*Spectra.spectraInterval,index);
+						break;
+				}
+				index++;
+			}
+		}
+		
 	}
 	
 }
