@@ -58,6 +58,9 @@ public class AudioClip implements Serializable {
 	/** Samples per second. Should be same as samplesPerSecond, but isn't guaranteed. Hang on. I got this. */
 	private float sampleRate;
 	
+	/** Object that can be played and paused */
+	private Clip clip;
+	
 	/**
 	 * Creates a new AudioClip using the given file path
 	 * @param filePath
@@ -158,18 +161,7 @@ public class AudioClip implements Serializable {
 	/** Plays the song */
 	public void play() {
 		
-		try {
-			File f = new File(path);
-			AudioInputStream stream = AudioSystem.getAudioInputStream(f);
-			AudioFormat format = stream.getFormat();
-			DataLine.Info info = new DataLine.Info(Clip.class, format);
-			Clip clip = (Clip) AudioSystem.getLine(info);
-			clip.open(stream);
-			clip.start();
-		}
-		catch (Exception e) {
-			e.printStackTrace();
-		}
+		play(0);
 	}
 	
 	public void play(int start) {
@@ -178,7 +170,7 @@ public class AudioClip implements Serializable {
 			AudioInputStream stream = AudioSystem.getAudioInputStream(f);
 			AudioFormat format = stream.getFormat();
 			DataLine.Info info = new DataLine.Info(Clip.class, format);
-			Clip clip = (Clip) AudioSystem.getLine(info);
+			clip = (Clip) AudioSystem.getLine(info);
 			clip.open(stream);
 			clip.setFramePosition(start);
 			clip.start();
@@ -186,6 +178,10 @@ public class AudioClip implements Serializable {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void pause() {
+		clip.stop();
 	}
 	
 	public double[] getSamples() {

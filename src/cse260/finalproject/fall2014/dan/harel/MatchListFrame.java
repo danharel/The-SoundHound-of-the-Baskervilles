@@ -30,12 +30,12 @@ public class MatchListFrame extends JFrame {
 	
 	private ArrayList<Match> sortedMatches;
 	
-	private JButton play;
+	private AudioClip clip;
 	
 	public MatchListFrame(Map<Match, Integer> matches) {
 		super("Matches");
 		
-		setLayout(new GridLayout(2,1));
+		setLayout(new GridLayout(3,1));
 		
 		this.matches = matches;
 		
@@ -59,13 +59,21 @@ public class MatchListFrame extends JFrame {
 		table = new JTable(values, header);
 		add(new JScrollPane(table));
 		
-		play = new JButton("Play clip");
+		JButton play = new JButton("Play clip");
 		play.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				playSelected();
 			}
 		});
 		add(play);
+		
+		JButton pause = new JButton("Stop clip");
+		pause.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pauseClip();
+			}
+		});
+		add(pause);
 		
 		setSize(800, 600);
 		
@@ -124,7 +132,7 @@ public class MatchListFrame extends JFrame {
 			 System.out.println("Full path: " + file);
 			 String path = file.getRawPath();
 			 System.out.println("Raw path: " + path);
-			 AudioClip clip = new AudioClip(path);
+			 clip = new AudioClip(path);
 			 clip.play(delta);
 		 } catch (UnsupportedAudioFileException e) {
 			 e.printStackTrace();
@@ -133,6 +141,17 @@ public class MatchListFrame extends JFrame {
 			e.printStackTrace();
 			System.out.println("Invalid URI.");
 		}
+	 }
+	 
+	 private void pauseClip() {
+		 if (clip != null) { 
+			 clip.pause();
+			 clip = null;
+		 }
+		 else {
+			 System.out.println("No clip is currently playing!");
+		 }
+		
 	 }
 
 }
