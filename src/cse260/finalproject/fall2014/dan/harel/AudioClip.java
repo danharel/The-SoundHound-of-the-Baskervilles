@@ -65,7 +65,15 @@ public class AudioClip implements Serializable {
 	 * @throws UnsupportedAudioFileException 
 	 */
 	public AudioClip(String filePath) throws UnsupportedAudioFileException {
-		this(new File(filePath));
+		this(filePath, 0);
+	}
+	
+	public AudioClip(File file) throws UnsupportedAudioFileException {
+		this(file, 0);
+	}
+	
+	public AudioClip(String filePath, int start) throws UnsupportedAudioFileException {
+		this(new File(filePath), start);
 	}
 	
 	/**
@@ -73,7 +81,7 @@ public class AudioClip implements Serializable {
 	 * @param file
 	 * @throws UnsupportedAudioFileException 
 	 */
-	public AudioClip(File file) throws UnsupportedAudioFileException {
+	public AudioClip(File file, int start) throws UnsupportedAudioFileException {
 		name = file.getName();
 		this.file = file;
 		path = file.getAbsolutePath();
@@ -108,7 +116,7 @@ public class AudioClip implements Serializable {
 
 			// Convert the samples in the original stream to floating point.
 			// Stereo is reduced to mono by averaging the channel values.
-			samples = new double[(int)length];
+			samples = new double[(int)length-start];
 			byte[] buf = new byte[bytesPerFrame];
 			for(int i = 0; i < length; i++) {
 				double v = 0.0;
@@ -125,9 +133,16 @@ public class AudioClip implements Serializable {
 					v += (s/32768.0);
 				}
 				v /= channels;
-				samples[i] = v;
+				try {
+					if (i >= start)
+						samples[i-start] = v;
+				}
+				catch (IndexOutOfBoundsException e) {
+					System.out.println("Start: " + start);
+					System.out.println("i: " + i);
+				}
 			}
-			sampleRate = format.getSampleRate();
+			//sampleRate = format.getSampleRate();
 		}
 		catch (Exception e) {
 			//e.printStackTrace();
@@ -150,6 +165,22 @@ public class AudioClip implements Serializable {
 			DataLine.Info info = new DataLine.Info(Clip.class, format);
 			Clip clip = (Clip) AudioSystem.getLine(info);
 			clip.open(stream);
+			clip.start();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void play(int start) {
+		try {
+			File f = new File(path);
+			AudioInputStream stream = AudioSystem.getAudioInputStream(f);
+			AudioFormat format = stream.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, format);
+			Clip clip = (Clip) AudioSystem.getLine(info);
+			clip.open(stream);
+			clip.setFramePosition(start);
 			clip.start();
 		}
 		catch (Exception e) {

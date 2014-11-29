@@ -1,15 +1,26 @@
 package cse260.finalproject.fall2014.dan.harel;
 
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Map;
 
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.DefaultListModel;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListModel;
 
-public class MatchInfoFrame extends JFrame {
+public class MatchListFrame extends JFrame {
+	
+	private JTable table;
 	
 	/** Header for the JTable */
 	private final String[] header = {"Song Name", "Delta", "Matches", "Offset"};
@@ -19,8 +30,12 @@ public class MatchInfoFrame extends JFrame {
 	
 	private ArrayList<Match> sortedMatches;
 	
-	public MatchInfoFrame(Map<Match, Integer> matches) {
+	private JButton play;
+	
+	public MatchListFrame(Map<Match, Integer> matches) {
 		super("Matches");
+		
+		setLayout(new GridLayout(2,1));
 		
 		this.matches = matches;
 		
@@ -41,7 +56,17 @@ public class MatchInfoFrame extends JFrame {
 			i++;
 		}
 		
-		add(new JScrollPane(new JTable(values, header)));
+		table = new JTable(values, header);
+		add(new JScrollPane(table));
+		
+		play = new JButton("Play clip");
+		play.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				playSelected();
+			}
+		});
+		add(play);
+		
 		setSize(800, 600);
 		
 		setVisible(true);
@@ -80,5 +105,34 @@ public class MatchInfoFrame extends JFrame {
    		 sec = "00";
    	 return seconds/60+":"+sec;
     }
+	 
+	 private void playSelected() {
+		 int[] rowsSelected = table.getSelectedRows();
+		 if (rowsSelected.length != 1) {
+			 JOptionPane.showMessageDialog(this, "Exactly one song must be selected!");
+			 return;
+		 }
+		 
+		 URI base = Main.getAudioFileLocation();
+		 System.out.println("Base: " + base);
+		 try {
+			 URI name = new URI((String)(table.getValueAt(rowsSelected[0],0)));
+			 System.out.println("Name: " + name);
+			 int delta = (Integer)(table.getValueAt(rowsSelected[0],1));
+			 System.out.println("Delta: " + delta);
+			 URI file = base.resolve(name);
+			 System.out.println("Full path: " + file);
+			 String path = file.getRawPath();
+			 System.out.println("Raw path: " + path);
+			 AudioClip clip = new AudioClip(path);
+			 clip.play(delta);
+		 } catch (UnsupportedAudioFileException e) {
+			 e.printStackTrace();
+			 System.out.println("Unable to open file for listening.");
+		 } catch (URISyntaxException e) {
+			e.printStackTrace();
+			System.out.println("Invalid URI.");
+		}
+	 }
 
 }

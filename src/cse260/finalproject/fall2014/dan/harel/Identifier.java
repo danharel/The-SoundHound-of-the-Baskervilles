@@ -203,7 +203,7 @@ public class Identifier extends JFrame {
 			else {
 			}
 		}
-		new MatchInfoFrame(matches);
+		new MatchListFrame(matches);
 		/*
 		for (Match match : matches.keySet())
 			System.out.println(match + "\t Occurances: " + matches.get(match));*/
