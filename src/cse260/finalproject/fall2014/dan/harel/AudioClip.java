@@ -224,7 +224,7 @@ public class AudioClip implements Serializable {
 	}
 	
 	public String getName() {
-		return name;
+		return name; 
 	}
 	
 	public ClipIdentification getIdentifier() {
