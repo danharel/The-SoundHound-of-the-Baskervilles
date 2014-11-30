@@ -21,7 +21,7 @@ public class ClipIdentification implements Serializable {
 	public ClipIdentification(AudioClip clip) {
 		name = clip.getName();
 		songId = clip.getTrackId();
-		length = (int)(clip.getSamples().length/clip.getSampleRate());
+		length = (int)(clip.getNumSamples()/AudioClip.samplesPerSecond);
 	}
 	
 	public String getName() {

@@ -39,12 +39,6 @@ public class AudioClip implements Serializable {
 
 	/** Path of the string */
 	private String path;
-
-	/** Name of the clip */
-	private String name;
-	
-	/** Clip representing the audio clip */
-	private File file;
 	
 	/** Array of bytes read in */
 	private double[] samples;
@@ -54,9 +48,6 @@ public class AudioClip implements Serializable {
 	
 	/** Identifies the clip */
 	private ClipIdentification identifier;
-	
-	/** Samples per second. Should be same as samplesPerSecond, but isn't guaranteed. Hang on. I got this. */
-	private float sampleRate;
 	
 	/** Object that can be played and paused */
 	private Clip clip;
@@ -85,8 +76,8 @@ public class AudioClip implements Serializable {
 	 * @throws UnsupportedAudioFileException 
 	 */
 	public AudioClip(File file, int start) throws UnsupportedAudioFileException {
-		name = file.getName();
-		this.file = file;
+		//name = file.getName();
+		//this.file = file;
 		path = file.getAbsolutePath();
 		System.out.println("absPath: " + path);
 		System.out.println("getPath: " + file.getPath());
@@ -145,7 +136,6 @@ public class AudioClip implements Serializable {
 					System.out.println("i: " + i);
 				}
 			}
-			//sampleRate = format.getSampleRate();
 		}
 		catch (Exception e) {
 			//e.printStackTrace();
@@ -198,7 +188,7 @@ public class AudioClip implements Serializable {
 		Depends on how well that works.*/
 		//return hashCode();
 		
-		return name.hashCode() + samples.hashCode();
+		return identifier.getName().hashCode() + samples.hashCode();
 	}
 	
 	/**
@@ -220,7 +210,7 @@ public class AudioClip implements Serializable {
 	}
 	
 	public String getName() {
-		return name; 
+		return identifier.getName(); 
 	}
 	
 	public ClipIdentification getIdentifier() {
@@ -229,28 +219,28 @@ public class AudioClip implements Serializable {
 	
 	@Override
 	public String toString() {
-		return name;
+		return identifier.getName();
 	}
 	
-	private void writeObject(ObjectOutputStream out) throws IOException {
-		out.defaultWriteObject();
-		out.writeObject(path);
-		out.writeObject(name);
-		out.writeObject(samples);
-		out.writeObject(peaks);
-	}
-	
-	private void readObject(ObjectInputStream in)
-			throws ClassNotFoundException, IOException {
-		System.out.println("Reading in file" + name);
-		// default deserialization
-		in.defaultReadObject();
-		path = (String) in.readObject();
-		name = (String) in.readObject();
-		samples = (double[]) in.readObject();
-		peaks = (List<Peak>[]) in.readObject();
-		file = new File(path);
-	}
+//	private void writeObject(ObjectOutputStream out) throws IOException {
+//		out.defaultWriteObject();
+//		out.writeObject(path);
+//		out.writeObject(name);
+//		out.writeObject(samples);
+//		out.writeObject(peaks);
+//	}
+//	
+//	private void readObject(ObjectInputStream in)
+//			throws ClassNotFoundException, IOException {
+//		System.out.println("Reading in file" + name);
+//		// default deserialization
+//		in.defaultReadObject();
+//		path = (String) in.readObject();
+//		name = (String) in.readObject();
+//		samples = (double[]) in.readObject();
+//		peaks = (List<Peak>[]) in.readObject();
+//		//file = new File(path);
+//	}
 	
 	public double getMaxAmplitude() {
 		double max = Double.MIN_VALUE;
@@ -261,8 +251,8 @@ public class AudioClip implements Serializable {
 		return max;
 	}
 	
-	public float getSampleRate() {
-		return sampleRate;
+	public int getNumSamples() {
+		return samples.length;
 	}
 
 }
