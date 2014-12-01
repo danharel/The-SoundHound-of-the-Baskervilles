@@ -22,7 +22,6 @@ public class WaveformPanel extends DisplayPanel {
 	
 	public WaveformPanel(AudioClip clip) {
 		super(clip);
-		// TODO Auto-generated constructor stub
 		
 		this.clip = clip;
 		

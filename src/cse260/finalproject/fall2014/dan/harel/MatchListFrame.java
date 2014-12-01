@@ -33,7 +33,9 @@ public class MatchListFrame extends JFrame {
 	
 	private AudioClip clip;
 	
-	private URI audioFileLocation;
+	private static URI audioFileLocation;
+	
+	private static boolean locationSet = false;
 	
 	public MatchListFrame(Map<Match, Integer> matches) {
 		super("Matches");
@@ -160,6 +162,11 @@ public class MatchListFrame extends JFrame {
 	 }
 	 
 	 private void setAudioFileLocation() {
+		 	if (locationSet)
+		 		return;
+		 
+		 	locationSet = true;
+		 
 		 	JFileChooser fc = new JFileChooser();
 			//fc.setCurrentDirectory(new java.io.File("."));
 			fc.setDialogTitle("Select the directory containing your audio files");

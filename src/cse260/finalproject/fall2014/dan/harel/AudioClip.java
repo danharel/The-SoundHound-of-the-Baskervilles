@@ -87,7 +87,6 @@ public class AudioClip implements Serializable {
 		try {
 			System.out.println("canonicalPath: " + file.getCanonicalPath());
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		
@@ -153,7 +152,6 @@ public class AudioClip implements Serializable {
 	
 	/** Plays the song */
 	public void play() {
-		
 		play(0);
 	}
 	

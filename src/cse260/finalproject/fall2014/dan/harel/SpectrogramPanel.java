@@ -22,7 +22,6 @@ public class SpectrogramPanel extends DisplayPanel {
 
 	public SpectrogramPanel(AudioClip clip) {
 		super(clip);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
