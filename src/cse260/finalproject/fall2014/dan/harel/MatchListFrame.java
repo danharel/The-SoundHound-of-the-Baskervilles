@@ -12,6 +12,7 @@ import java.util.Map;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -31,6 +32,8 @@ public class MatchListFrame extends JFrame {
 	private ArrayList<Match> sortedMatches;
 	
 	private AudioClip clip;
+	
+	private URI audioFileLocation;
 	
 	public MatchListFrame(Map<Match, Integer> matches) {
 		super("Matches");
@@ -77,6 +80,8 @@ public class MatchListFrame extends JFrame {
 		
 		setSize(800, 600);
 		
+		setAudioFileLocation();
+		
 		setVisible(true);
 	}
 
@@ -121,7 +126,7 @@ public class MatchListFrame extends JFrame {
 			 return;
 		 }
 		 
-		 URI base = Main.getAudioFileLocation();
+		 URI base = audioFileLocation;
 		 System.out.println("Base: " + base);
 		 try {
 			 URI name = new URI((String)(table.getValueAt(rowsSelected[0],0)));
@@ -149,9 +154,27 @@ public class MatchListFrame extends JFrame {
 			 clip = null;
 		 }
 		 else {
-			 System.out.println("No clip is currently playing!");
+			 JOptionPane.showMessageDialog(this, "No clip is currently playing!");
 		 }
 		
+	 }
+	 
+	 private void setAudioFileLocation() {
+		 	JFileChooser fc = new JFileChooser();
+			//fc.setCurrentDirectory(new java.io.File("."));
+			fc.setDialogTitle("Select the directory containing your audio files");
+			fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+			int selectVal = fc.showOpenDialog(this);
+			if (selectVal == JFileChooser.APPROVE_OPTION) {
+				System.out.println("getCurrentDirectory(): " + fc.getCurrentDirectory());
+				System.out.println("getSelectedFile() : " + fc.getSelectedFile());
+				audioFileLocation = fc.getSelectedFile().toURI();
+				System.out.println("Absolute path of audio file location: " + audioFileLocation);
+			} else {
+				JOptionPane.showMessageDialog(this, "In order to continue, your audio files must be located.");
+				System.exit(-1);
+			}
 	 }
 
 }

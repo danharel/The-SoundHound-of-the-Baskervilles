@@ -36,6 +36,9 @@ public class AudioClip implements Serializable {
 	
 	/** Sample rate of a clip. Figure out how to convert a song to this bitrate */
 	public static final int samplesPerSecond = 8000;
+	
+	/** Name of the AudioClip */
+	private String name;
 
 	/** Path of the string */
 	private String path;
@@ -76,7 +79,7 @@ public class AudioClip implements Serializable {
 	 * @throws UnsupportedAudioFileException 
 	 */
 	public AudioClip(File file, int start) throws UnsupportedAudioFileException {
-		//name = file.getName();
+		name = file.getName();
 		//this.file = file;
 		path = file.getAbsolutePath();
 		System.out.println("absPath: " + path);
@@ -188,7 +191,7 @@ public class AudioClip implements Serializable {
 		Depends on how well that works.*/
 		//return hashCode();
 		
-		return identifier.getName().hashCode() + samples.hashCode();
+		return name.hashCode() + samples.hashCode();
 	}
 	
 	/**
@@ -210,7 +213,7 @@ public class AudioClip implements Serializable {
 	}
 	
 	public String getName() {
-		return identifier.getName(); 
+		return name; 
 	}
 	
 	public ClipIdentification getIdentifier() {
@@ -219,7 +222,7 @@ public class AudioClip implements Serializable {
 	
 	@Override
 	public String toString() {
-		return identifier.getName();
+		return name;
 	}
 	
 //	private void writeObject(ObjectOutputStream out) throws IOException {

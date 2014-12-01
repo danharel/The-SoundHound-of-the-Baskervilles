@@ -5,6 +5,7 @@ import java.net.URI;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Main class to be run.
@@ -28,22 +29,18 @@ public class Main extends JFrame {
 	public static void main(String[] args) {
 		//JOptionPane.showMessageDialog(null, "Please locate the directory of the audio files.");
 		
-		JFileChooser fc = new JFileChooser();
-		//fc.setCurrentDirectory(new java.io.File("."));
-		fc.setDialogTitle("Select the directory containing your audio files");
-		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-		int selectVal = fc.showOpenDialog(null);
-		if (selectVal == JFileChooser.APPROVE_OPTION) {
-			System.out.println("getCurrentDirectory(): " + fc.getCurrentDirectory());
-			System.out.println("getSelectedFile() : " + fc.getSelectedFile());
-			audioFileLocation = fc.getSelectedFile().toURI();
-			System.out.println("Absolute path of audio file location: " + audioFileLocation);
-		} else {
-			JOptionPane.showMessageDialog(null, "In order to continue, your audio files must be located.");
-			System.exit(-1);
+		JFileChooser jc = new JFileChooser();
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+		        "Database file", "dat");
+		jc.setFileFilter(filter);
+		jc.setDialogTitle("Please select the database file");
+		int returnVal = jc.showOpenDialog(null);
+		if(returnVal == JFileChooser.APPROVE_OPTION) {
+			SongDatabase.setDatabasePath(jc.getSelectedFile().getAbsolutePath());
 		}
-		
+		else {
+			System.out.println("using default database location.");
+		}
 
 		identifier = new Identifier();
 		indexer = new Indexer();

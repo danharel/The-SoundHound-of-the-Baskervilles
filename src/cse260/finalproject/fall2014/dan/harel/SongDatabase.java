@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  * Database of songs and probes.
  * @author danharel
@@ -43,7 +47,7 @@ public class SongDatabase implements Serializable {
 	private boolean modified;
 	
 	/** File name in which the databases will be saved to and loaded from */
-	private static final String SAVE_PATH = "database.dat";
+	private static String SAVE_PATH = "database.dat";
 	
 	private SongDatabase() {
 		this(new HashMap<Probe, Set<ProbeLocation>>(), new HashMap<ClipIdentification, List<Probe>>());
@@ -227,6 +231,7 @@ public class SongDatabase implements Serializable {
 	 * Loads the database from a file
 	 */
 	private static void loadDatabase() {
+		
 		try {
 			File file = new File(SAVE_PATH);
 			/*
@@ -276,5 +281,9 @@ public class SongDatabase implements Serializable {
 		for (Probe probe : probeLocations.keySet()) {
 			System.out.println(probe);
 		}
+	}
+	
+	public static void setDatabasePath(String path) {
+		SAVE_PATH = path;
 	}
 }
